@@ -11,8 +11,8 @@ import { User } from "../types";
 export const users: Omit<User, "color">[] = [
 
   {
-    id: "[mtalifhani54@gmail.com]",
-    name: "[Talifhani Mulaudzi]",
+    id: "mtalifhani54@gmail.com",
+    name: "Talifhani Mulaudzi",
     avatar: "https://liveblocks.io/avatars/avatar-0.png",
     groupIds: ["product", "engineering", "design"],
   },

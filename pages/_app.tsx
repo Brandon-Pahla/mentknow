@@ -19,7 +19,7 @@ export default function App({
       <TooltipProvider>
         <SessionProvider session={pageProps.session}>
           <Component {...pageProps} />
-          <Badge />
+          {/* <Badge /> */}
         </SessionProvider>
       </TooltipProvider>
     </>
