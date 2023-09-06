@@ -82,15 +82,12 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
   } | null>();
 
   function getRandomColor(): string {
-    // Array of hex colors
     const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
 
-    const randomIndex = Math.floor(Math.random() * 5);
+    const randomIndex = Math.floor(Math.random() * colors.length);
   
-    // Get the randomly selected color
     const randomColor = colors[randomIndex];
   
-    // Return the random color as a CSS color
     return randomColor;
   }
 
