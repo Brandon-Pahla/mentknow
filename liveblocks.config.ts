@@ -56,6 +56,7 @@ export type Note = LiveObject<{
   y: number;
   title: string
   text: string;
+  color: string;
   selectedBy: UserMeta["info"] | null;
   id: string;
 }>;
