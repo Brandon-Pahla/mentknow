@@ -62,7 +62,7 @@ export const WhiteboardNote = memo(
       return null;
     }
 
-    const { x, y, text, selectedBy } = note;
+    const { x, y, title, text, color, selectedBy } = note;
 
     return (
       <div
@@ -79,7 +79,12 @@ export const WhiteboardNote = memo(
         }}
         {...props}
       >
-        <div className={styles.note}>
+        <div className={styles.note}
+        style={{
+          backgroundColor: color,
+          ...style,
+        }}
+        >
           <div className={styles.header}>
             <Button
               className={styles.deleteButton}
@@ -97,6 +102,9 @@ export const WhiteboardNote = memo(
                 />
               ) : null}
             </div>
+          </div>
+          <div className={styles.title}>
+            <h1>{title}</h1>
           </div>
           <div className={styles.content}>
             <div className={styles.textAreaSize}>{text + " "}</div>
