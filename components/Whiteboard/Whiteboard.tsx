@@ -90,6 +90,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     const note = new LiveObject({
       x: getRandomInt(300),
       y: getRandomInt(300),
+      title: getTitle(),
       text: "",
       selectedBy: null,
       id: noteId,
@@ -242,3 +243,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
+function getTitle(): string {
+  const title = window.prompt("Please enter a title:");
+  return title? title: "No title";
+}
+
