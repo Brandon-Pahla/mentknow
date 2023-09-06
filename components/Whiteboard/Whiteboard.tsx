@@ -348,3 +348,11 @@ function getRandomInt(max: number) {
 
 
 
+function getRandomColor(): string {
+  // Array of hex colors
+  const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
+  const randomColor = colors[getRandomInt(colors.length)];
+
+  // Return the random color as a CSS color
+  return randomColor;
+}
