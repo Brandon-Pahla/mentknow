@@ -14,3 +14,12 @@ export type Group = {
   id: string;
   name: string;
 };
+
+
+export interface MessageType {
+  userId: string;
+  username: string;
+  color: string;
+  msg: string;
+  id: number;
+}

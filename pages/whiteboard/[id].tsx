@@ -1,4 +1,4 @@
-import { LiveMap } from "@liveblocks/client";
+import { LiveList, LiveMap } from "@liveblocks/client";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
@@ -60,8 +60,8 @@ export default function WhiteboardDocumentView({
   return (
     <RoomProvider
       id={id as string}
-      initialPresence={{ cursor: null }}
-      initialStorage={{ notes: new LiveMap() }}
+      initialPresence={{ cursor: null, isTyping: false }}
+      initialStorage={{ notes: new LiveMap(), messages: new LiveList()}}
     >
       <DocumentLayout
         header={

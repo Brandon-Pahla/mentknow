@@ -26,6 +26,7 @@ import { Spinner } from "../../primitives/Spinner";
 import { Tooltip } from "../../primitives/Tooltip";
 import { useBoundingClientRectRef } from "../../utils";
 import { Cursors } from "../Cursors";
+import { Chat } from "../Chat";
 import { WhiteboardNote } from "./WhiteboardNote";
 import styles from "./Whiteboard.module.css";
 
@@ -234,7 +235,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             />
           </Tooltip>
         </div>
+        
       )}
+      <Chat currentUser={currentUser} />
     </div>
   );
 }
