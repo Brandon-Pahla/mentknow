@@ -1,10 +1,11 @@
+import "../styles/globals.css";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { Badge } from "../components/Badge";
-import "../styles/globals.css";
+
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App({
   Component,
@@ -13,7 +14,7 @@ export default function App({
   return (
     <>
       <Head>
-        <title>Starter Kit</title>
+        <title>MENTKNOW</title>
         <link href="/favicon.svg" rel="icon" type="image/svg" />
       </Head>
       <TooltipProvider>
