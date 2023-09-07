@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { BsDownload } from "react-icons/bs"
 import { LiveObject, shallow } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { nanoid } from "nanoid";
@@ -131,6 +132,27 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     }
   }, []);
 
+  // Extract All Notes, that exist in this whiteboard.
+  //TODO: I do not believe useMutation is the right hook to use here, I will update this code later on.
+  const extractNotes = useMutation(({ storage, self }) => {
+    if (!self.canWrite) {
+      console.log("Failed to extract data");
+      return;
+    }
+
+    noteIds.forEach((noteId) => {
+      const note = storage.get("notes").get(noteId);
+      if (note) {
+        const title = note.get("title"); 
+        const text = note.get("text");
+        console.log(title);
+        console.log(text);
+        console.log("+++++++++++");
+      }
+    });
+    
+  }, [])
+
   // On note pointer down, pause history, set dragged note
   function handleNotePointerDown(
     e: PointerEvent<HTMLDivElement>,
@@ -245,6 +267,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               onClick={history.redo}
               variant="subtle"
             />
+          </Tooltip>
+          <Tooltip content="Extract notes" sideOffset={16}>
+            <Button icon={<BsDownload/>} onClick={extractNotes} variant="subtle" />
           </Tooltip>
         </div>
         
