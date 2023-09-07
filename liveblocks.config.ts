@@ -53,10 +53,10 @@ export type Presence = {
 };
 
 type Message = {
-  sender?: string;
+  sender: string;
   timestamp: number;
   text: string;
-  checked?: boolean;
+  color: string;
 };
 
 export type Note = LiveObject<{

@@ -17,8 +17,9 @@ export type Group = {
 
 
 export interface MessageType {
+  timestamp: number;
   userId: string;
-  username: string;
+  sender: string;
   color: string;
   msg: string;
   id: number;

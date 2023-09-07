@@ -6,6 +6,7 @@ import {
     useBroadcastEvent,
     useMutation,
     useOthers,
+    useSelf,
     useStorage,
     useUpdateMyPresence,
 } from "../../liveblocks.config";
@@ -47,6 +48,8 @@ function SomeoneIsTyping() {
 
 export function Chat({ currentUser }: Props) {
 
+    const self = useSelf();
+
     const msgList = useRef<HTMLDivElement>(null);
 
     const [newMsg, setNewMsg] = useState(false);
@@ -56,8 +59,10 @@ export function Chat({ currentUser }: Props) {
     const updateMyPresence = useUpdateMyPresence();
     const messages = useStorage((root) => root.messages);
 
-    const sendMessage = useMutation(({ storage }, text, timestamp) => {
-        storage.get("messages").push(new LiveObject({ text, timestamp }));
+    // console.log("Messages:",messages)
+
+    const sendMessage = useMutation(({ storage }, text, timestamp, sender, color) => {
+        storage.get("messages").push(new LiveObject({ text, timestamp,sender, color }));
     }, []);
 
     const deleteMessage = useMutation(({ storage }, index) => {
@@ -110,10 +115,10 @@ export function Chat({ currentUser }: Props) {
                         <ChatMessage
                             key={index}
                             msg={message.text}
-                            color=""
-                            userId=""
+                            color={message.color}
+                            userId={message.sender}
                             deleteMessage={() => deleteMessage(index)}
-                            id={index} username={"Tali"}                         />
+                            id={index} sender={message.sender} timestamp={message.timestamp}                         />
                     ))}
                 </div>
                 <ChatInput

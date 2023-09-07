@@ -1,31 +1,23 @@
 import React from "react";
 import { MessageType } from "../../types";
 
-// interface ChatMessageProps {
-//   message: {
-//     text: string;
-//   };
-//   deleteMessage: () => void;
-// }
 
-export function ChatMessage({ msg,username,deleteMessage }: MessageType) {
+export function ChatMessage({ msg,sender, timestamp, color,deleteMessage }: MessageType) {
   return (
     <div 
-      className={`my-2 flex gap-2 text-clip ${username && 'justify-end text-right'}`}
+      className={`bg-[#c9d3ff] w-fit px-4 py-4 rounded-lg my-2 flex gap-2 text-clip ${sender && 'justify-end text-right'} `}
     >
-      {/* <span className="text-1xl font-bold">{msg}</span>
-      <button className="delete_button" onClick={deleteMessage}>
+      { (
+        <div className=" text-left flex flex-col justify-start">
+          <i className=" font-bold text-xs" style={{ color: color }}>{sender}</i>
+          <p className="text-xs text-indigo-600 " >{new Date(timestamp).toLocaleTimeString()}</p>
+        </div>
+      )}
+      
+      <p className="whitespace-normal" >{msg}</p>
+      {/* <button className="delete_button" onClick={deleteMessage}>
         ✕
       </button> */}
-
-      { (
-        <h5 style={{ color:'red' }} className="font-bold">
-          {username}
-        </h5>
-      )}
-      <p style={{ wordBreak: 'break-all' }}>{msg}</p><button className="delete_button" onClick={deleteMessage}>
-        ✕
-      </button>
     </div>
   );
 }
