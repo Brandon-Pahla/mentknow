@@ -22,4 +22,5 @@ export interface MessageType {
   color: string;
   msg: string;
   id: number;
+  deleteMessage: () => void;
 }

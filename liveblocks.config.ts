@@ -54,7 +54,7 @@ export type Presence = {
 
 type Message = {
   sender?: string;
-  timestamp?: number;
+  timestamp: number;
   text: string;
   checked?: boolean;
 };
