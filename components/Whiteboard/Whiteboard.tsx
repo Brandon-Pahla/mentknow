@@ -103,7 +103,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     const note = new LiveObject({
       x: getRandomInt(300),
       y: getRandomInt(300),
-      title: getTitle(),
+      title: "",
       text: "",
       color: getRandomColor(),
       selectedBy: null,
@@ -200,8 +200,16 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     }
   }
 
+  // When note title is changed, update the text and selected user on the LiveObject
+  function handleNoteTitleChange(
+    e: ChangeEvent<HTMLTextAreaElement>,
+    noteId: string
+  ) {
+    handleNoteUpdate(noteId, { title: e.target.value, selectedBy: currentUser });
+  }
+
   // When note text is changed, update the text and selected user on the LiveObject
-  function handleNoteChange(
+  function handleNoteTextChange(
     e: ChangeEvent<HTMLTextAreaElement>,
     noteId: string
   ) {
@@ -277,7 +285,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             id={id}
             key={id}
             onBlur={(e) => handleNoteBlur(e, id)}
-            onChange={(e) => handleNoteChange(e, id)}
+            onTitleChange={(e) => handleNoteTitleChange(e, id)}
+            onTextChange={(e) => handleNoteTextChange(e, id)}
             onDelete={() => handleNoteDelete(id)}
             onFocus={(e) => handleNoteFocus(e, id)}
             onPointerDown={(e) => handleNotePointerDown(e, id)}
@@ -323,10 +332,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
-}
-function getTitle(): string {
-  const title = window.prompt("Please enter a title:");
-  return title ? title : "No title";
 }
 
 

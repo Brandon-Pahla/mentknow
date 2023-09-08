@@ -23,7 +23,8 @@ interface Props
   dragged: boolean;
   id: string;
   onBlur: FocusEventHandler<HTMLTextAreaElement>;
-  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onTitleChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onTextChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
   onFocus: FocusEventHandler<HTMLTextAreaElement>;
   onPointerDown: PointerEventHandler<HTMLDivElement>;
@@ -35,7 +36,8 @@ export const WhiteboardNote = memo(
     dragged,
     onPointerDown,
     onDelete,
-    onChange,
+    onTitleChange,
+    onTextChange,
     onFocus,
     onBlur,
     style,
@@ -43,16 +45,35 @@ export const WhiteboardNote = memo(
     ...props
   }: Props) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const titleAreaRef = useRef<HTMLTextAreaElement>(null);
+
     const note = useStorage((root) => root.notes.get(id));
 
     const handleDoubleClick = useCallback(() => {
       textAreaRef.current?.focus();
+      titleAreaRef.current?.focus();
     }, []);
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === "Escape") {
           textAreaRef.current?.blur();
+        }
+      },
+      []
+    );
+
+    const handleEnterKeyPress = useCallback(
+      (event: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Escape") {
+          titleAreaRef.current?.blur();
+        }
+
+        if (event.key === "Enter") {
+          event.preventDefault();
+          if (event.target === titleAreaRef.current) {
+            textAreaRef.current?.focus;
+          }
         }
       },
       []
@@ -104,14 +125,26 @@ export const WhiteboardNote = memo(
             </div>
           </div>
           <div className={styles.title}>
-            <h1>{title}</h1>
+            <div className={styles.textAreaSize}>{title + " "}</div>
+            <textarea
+                className={styles.title}
+                onBlur={onBlur}
+                onChange={onTitleChange}
+                onFocus={onFocus}
+                onKeyDown={handleEnterKeyPress}
+                onPointerDown={(e) => e.stopPropagation()}
+                placeholder="Title..."
+                // rows={1}
+                ref={titleAreaRef}
+                value={title}
+              /> 
           </div>
           <div className={styles.content}>
             <div className={styles.textAreaSize}>{text + " "}</div>
             <textarea
               className={styles.textArea}
               onBlur={onBlur}
-              onChange={onChange}
+              onChange={onTextChange}
               onFocus={onFocus}
               onKeyDown={handleKeyDown}
               onPointerDown={(e) => e.stopPropagation()}
