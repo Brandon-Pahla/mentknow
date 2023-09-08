@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import Auth0Provider from "next-auth/providers/auth0";
 import { getUser } from "../../../lib/server";
 import { User } from "../../../types";
 
@@ -30,6 +31,12 @@ export const authOptions = {
   // Configure one or more authentication providers
   // More info: https://next-auth.js.org/providers/
   providers: [
+
+    // Auth0Provider({
+    //   clientId: process.env.AUTH0_CLIENT_ID as string,
+    //   clientSecret: process.env.AUTH0_CLIENT_SECRET as string,
+    //   issuer: process.env.AUTH0_ISSUER_BASE_URL as string,
+    // }),
     // CredentialsProvider is used for the demo auth system
     // Replace this with a real provider, e.g. GitHub, Auth0
     CredentialsProvider({
@@ -38,7 +45,8 @@ export const authOptions = {
         email: {
           label: "email",
           type: "text",
-        },
+          placeholder: "Your email address..."
+        }
       },
       async authorize(credentials) {
         if (!credentials) {

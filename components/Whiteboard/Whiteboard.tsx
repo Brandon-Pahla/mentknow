@@ -30,6 +30,7 @@ import { Cursors } from "../Cursors";
 import { Chat } from "../Chat";
 import { WhiteboardNote } from "./WhiteboardNote";
 import styles from "./Whiteboard.module.css";
+import { PopupForm } from "./PopupForm";
 
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
@@ -86,9 +87,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
 
     const randomIndex = Math.floor(Math.random() * colors.length);
-  
+
     const randomColor = colors[randomIndex];
-  
+
     return randomColor;
   }
 
@@ -143,14 +144,14 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     noteIds.forEach((noteId) => {
       const note = storage.get("notes").get(noteId);
       if (note) {
-        const title = note.get("title"); 
+        const title = note.get("title");
         const text = note.get("text");
         console.log(title);
         console.log(text);
         console.log("+++++++++++");
       }
     });
-    
+
   }, [])
 
   // On note pointer down, pause history, set dragged note
@@ -219,6 +220,43 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     history.resume();
   }
 
+  interface FormData {
+    title: string;
+    category: string;
+  }
+
+  // const [isFormVisible, setFormVisibility] = useState(false);
+
+  // const handleSubmitNote = ({ title, category }: FormData) => {
+  //   // Handle the submitted data (title and category)
+  //   console.log(`Title: ${title}, Category: ${category}`);
+
+    // const mutation = useMutation(({ storage, self }) => {
+    //   if (self.isReadOnly) {
+    //     return;
+    //   }
+  
+    //   const noteId = nanoid();
+    //   const note = new LiveObject({
+    //     x: getRandomInt(300),
+    //     y: getRandomInt(300),
+    //     title: title,
+    //     text: "",
+    //     color: getRandomColor(),
+    //     selectedBy: null,
+    //     id: noteId,
+    //   });
+    //   storage.get("notes").set(noteId, note);
+    // }, []);
+
+    // // Executing the mutation!
+    // mutation();
+
+    // Close the form after submission
+  //   setFormVisibility(false);
+  // };
+
+
   return (
     <div
       className={clsx(className, styles.canvas)}
@@ -252,6 +290,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           <Tooltip content="Add note" sideOffset={16}>
             <Button icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
           </Tooltip>
+          {/* <Tooltip content="Test Add note" sideOffset={16}>
+            <button onClick={() => setFormVisibility(true)}>Show Form</button>
+          </Tooltip> */}
           <Tooltip content="Undo" sideOffset={16}>
             <Button
               disabled={!canUndo}
@@ -269,11 +310,12 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             />
           </Tooltip>
           <Tooltip content="Extract notes" sideOffset={16}>
-            <Button icon={<BsDownload/>} onClick={extractNotes} variant="subtle" />
+            <Button icon={<BsDownload />} onClick={extractNotes} variant="subtle" />
           </Tooltip>
         </div>
-        
+
       )}
+      {/* {isFormVisible && <PopupForm onSubmit={handleSubmitNote} />} */}
       <Chat currentUser={currentUser} />
     </div>
   );
@@ -284,6 +326,8 @@ function getRandomInt(max: number) {
 }
 function getTitle(): string {
   const title = window.prompt("Please enter a title:");
-  return title? title: "No title";
+  return title ? title : "No title";
 }
+
+
 

@@ -11,7 +11,7 @@ import { getRandom } from "../utils";
  * @param userId - The user's id
  */
 export async function getUser(userId: string): Promise<User | null> {
-  const user = users.find((user) => user.id === userId);
+  const user = users.find((user) => user.id === userId); 
 
   if (!user) {
     console.warn(`
