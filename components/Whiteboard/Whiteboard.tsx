@@ -103,6 +103,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     const note = new LiveObject({
       x: getRandomInt(300),
       y: getRandomInt(300),
+      tag: "",
       title: "",
       text: "",
       color: getRandomColor(),
@@ -146,8 +147,10 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       if (note) {
         const title = note.get("title");
         const text = note.get("text");
+        const tag = note.get("tag");
         console.log(title);
         console.log(text);
+        console.log(tag);
         console.log("+++++++++++");
       }
     });
@@ -198,6 +201,14 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       };
       handleNoteUpdate(dragInfo.current.noteId, coords);
     }
+  }
+
+  //When note tag is change, update the text and selected user on the liveObject
+  function handleNoteTagChange(
+    e: ChangeEvent<HTMLTextAreaElement>,
+    noteId: string
+  ) {
+    handleNoteUpdate(noteId, { tag: e.target.value, selectedBy: currentUser});
   }
 
   // When note title is changed, update the text and selected user on the LiveObject
@@ -285,6 +296,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             id={id}
             key={id}
             onBlur={(e) => handleNoteBlur(e, id)}
+            onTagChange={(e) => handleNoteTagChange(e, id)}
             onTitleChange={(e) => handleNoteTitleChange(e, id)}
             onTextChange={(e) => handleNoteTextChange(e, id)}
             onDelete={() => handleNoteDelete(id)}

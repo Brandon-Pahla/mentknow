@@ -23,6 +23,7 @@ interface Props
   dragged: boolean;
   id: string;
   onBlur: FocusEventHandler<HTMLTextAreaElement>;
+  onTagChange: ChangeEventHandler<HTMLTextAreaElement>;
   onTitleChange: ChangeEventHandler<HTMLTextAreaElement>;
   onTextChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
@@ -36,6 +37,7 @@ export const WhiteboardNote = memo(
     dragged,
     onPointerDown,
     onDelete,
+    onTagChange,
     onTitleChange,
     onTextChange,
     onFocus,
@@ -46,6 +48,7 @@ export const WhiteboardNote = memo(
   }: Props) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const titleAreaRef = useRef<HTMLTextAreaElement>(null);
+    const tagAreaRef = useRef<HTMLTextAreaElement>(null);
 
     const note = useStorage((root) => root.notes.get(id));
 
@@ -67,12 +70,15 @@ export const WhiteboardNote = memo(
       (event: KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === "Escape") {
           titleAreaRef.current?.blur();
+          tagAreaRef.current?.blur();
         }
 
         if (event.key === "Enter") {
           event.preventDefault();
           if (event.target === titleAreaRef.current) {
-            textAreaRef.current?.focus;
+            textAreaRef.current?.focus();
+          } else if (event.target === tagAreaRef.current) {
+            titleAreaRef.current?.focus();
           }
         }
       },
@@ -83,7 +89,7 @@ export const WhiteboardNote = memo(
       return null;
     }
 
-    const { x, y, title, text, color, selectedBy } = note;
+    const { x, y, tag, title, text, color, selectedBy } = note;
 
     return (
       <div
@@ -113,6 +119,29 @@ export const WhiteboardNote = memo(
               onClick={onDelete}
               variant="subtle"
             />
+            <div>
+              <div className="
+                leading-6 max-h-8 overflow-hidden w-full whitespace-pre-wrap break-words
+                invisible relative
+              ">
+                {tag + " "}
+              </div>
+              <textarea
+                className="
+                  bg-transparent max-h-24	leading-6 shadow-none border-0 whitespace-nowrap
+                  outline-none resize-none text-base font-light block break-word justify-center
+                "
+                onBlur={onBlur}
+                onChange={onTagChange}
+                onFocus={onFocus}
+                onKeyDown={handleEnterKeyPress}
+                onPointerDown={(e) => e.stopPropagation()}
+                placeholder="Tag"
+                ref={tagAreaRef}
+                rows={1}
+                value={tag}
+              />
+            </div>
             <div className={styles.presence}>
               {selectedBy ? (
                 <Avatar
@@ -124,7 +153,7 @@ export const WhiteboardNote = memo(
               ) : null}
             </div>
           </div>
-          <div className={styles.title}>
+          <div>
             <div className={styles.textAreaSize}>{title + " "}</div>
             <textarea
                 className={styles.title}

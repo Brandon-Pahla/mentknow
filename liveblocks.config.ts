@@ -62,6 +62,7 @@ type Message = {
 export type Note = LiveObject<{
   x: number;
   y: number;
+  tag: string;
   title: string
   text: string;
   color: string;
