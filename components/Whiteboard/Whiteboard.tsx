@@ -389,7 +389,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           <Tooltip content="Add note" sideOffset={16}>
             <Button icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
           </Tooltip>
-          <Tooltip content="Undo" sideOffset={16}>
+          <Tooltip content="Undo" sideOffset={16} side="right">
             <Button
               disabled={!canUndo}
               icon={<UndoIcon />}
