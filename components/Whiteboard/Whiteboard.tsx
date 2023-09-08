@@ -346,8 +346,6 @@ function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
-
-
 function getRandomColor(): string {
   // Array of hex colors
   const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
