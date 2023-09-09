@@ -21,12 +21,13 @@ export function AuthenticationLayout({
       <main className={styles.main}>
         <h2 className={styles.title}>Sign in to your account</h2>
         {providers && providers.credentials ? (
-          <DemoLogin />
+          // <DemoLogin />
+          <p>NOthing</p>
         ) : (
           <NextAuthLogin providers={providers} />
         )}
       </main>
-      <aside className={styles.aside} />
+      {/* <aside className={styles.aside} /> */}
     </div>
   );
 }
@@ -49,16 +50,16 @@ function NextAuthLogin({ providers }: Props) {
 
 // === EVERYTHING BELOW ONLY NECESSARY FOR DEMO AUTH ===========================
 
-function DemoLogin() {
-  return (
-    <div className={styles.actions}>
-      <Select
-        items={users.map((user) => ({ value: user.id, title: user.name }))}
-        onChange={(email) => {
-          signIn("credentials", { email });
-        }}
-        placeholder="Choose a profile…"
-      />
-    </div>
-  );
-}
+// function DemoLogin() {
+//   return (
+//     <div className={styles.actions}>
+//       <Select
+//         items={users.map((user) => ({ value: user.id, title: user.name }))}
+//         onChange={(email) => {
+//           signIn("credentials", { email });
+//         }}
+//         placeholder="Choose a profile…"
+//       />
+//     </div>
+//   );
+// }

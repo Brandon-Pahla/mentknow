@@ -8,6 +8,7 @@ import { Button } from "../../primitives/Button";
 import { Popover } from "../../primitives/Popover";
 import { Logo } from "../Logo";
 import styles from "./DashboardHeader.module.css";
+import { Router, useRouter } from "next/router";
 
 interface Props extends ComponentProps<"header"> {
   isOpen: boolean;
@@ -21,6 +22,8 @@ export function DashboardHeader({
   ...props
 }: Props) {
   const { data: session } = useSession();
+
+  const router = useRouter()
 
   return (
     <header className={clsx(className, styles.header)} {...props}>
@@ -53,7 +56,10 @@ export function DashboardHeader({
                   <Button
                     className={styles.profilePopoverButton}
                     icon={<SignOutIcon />}
-                    onClick={() => signOut()}
+                    onClick={() => 
+                      router.push('/api/auth/signout')
+                      
+                    }
                   >
                     Sign out
                   </Button>

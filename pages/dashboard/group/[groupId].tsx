@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
     return {
       redirect: {
         permanent: false,
-        destination: "/",
+        destination: "/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F",
       },
     };
   }

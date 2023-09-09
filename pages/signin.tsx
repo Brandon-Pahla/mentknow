@@ -5,12 +5,14 @@ import { useEffect } from "react";
 import { AuthenticationLayout } from "../layouts/Authentication";
 import { useSession } from "next-auth/react";
 import * as Server from "../lib/server";
+import connectToDatabase from "../mongodb";
 
 interface Props {
   providers: Awaited<ReturnType<typeof getProviders>>;
 }
 
 export default function SignIn({ providers }: Props) {
+  connectToDatabase();
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -22,8 +24,10 @@ export default function SignIn({ providers }: Props) {
 
   return <AuthenticationLayout providers={providers} />;
 }
-
+    // Call the connectToDatabase function when the app starts
+    connectToDatabase();
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  connectToDatabase();
   const session = await Server.getServerSession(req, res);
 
   // If logged in, go to dashboard

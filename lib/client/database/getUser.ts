@@ -10,6 +10,7 @@ import { DocumentUser, User } from "../../../types";
  */
 export async function getUser(userId: DocumentUser["id"]): Promise<User> {
   const url = `/api/database/users?userId=${encodeURIComponent(userId)}`;
+  console.log("User id +++++ ",userId)
   const response = await fetch(url);
   return await response.json();
 }

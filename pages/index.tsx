@@ -27,7 +27,7 @@ function Feature({ title, description, className, ...props }: FeatureProps) {
 export default function Index() {
   return (
     <MarketingLayout>
-      <Container className={styles.section}>
+      {/* <Container className={styles.section}>
         <div className={styles.heroInfo}>
           <h1 className={styles.heroTitle}>
             Kickstart your collaborative&nbsp;app
@@ -107,7 +107,7 @@ export default function Index() {
             title="SWR"
           />
         </div>
-      </Container>
+      </Container> */}
     </MarketingLayout>
   );
 }

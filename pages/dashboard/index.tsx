@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
 }) => {
   const session = await Server.getServerSession(req, res);
 
-  // If not logged in, redirect to marketing page
+  // If not logged in, redirect to login page
   if (!session) {
     return {
       redirect: {
