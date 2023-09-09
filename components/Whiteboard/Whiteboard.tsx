@@ -83,16 +83,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     offset: { x: number; y: number };
   } | null>();
 
-  function getRandomColor(): string {
-    const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
-
-    const randomIndex = Math.floor(Math.random() * colors.length);
-
-    const randomColor = colors[randomIndex];
-
-    return randomColor;
-  }
-
   // Insert a new note onto the canvas
   const insertNote = useMutation(({ storage, self }) => {
     if (self.isReadOnly) {
@@ -346,5 +336,10 @@ function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
+function getRandomColor(): string {
+  const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
+  
+  const randomColor = colors[getRandomInt(colors.length)];
 
-
+  return randomColor;
+}
