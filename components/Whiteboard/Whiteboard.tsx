@@ -405,8 +405,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
-          <Tooltip content="Extract notes" sideOffset={16}>
-            <Button icon={<BsDownload />} onClick={extractNotes} variant="subtle" />
+          <Tooltip content="Cluster notes" sideOffset={16} side="right">
+            <Button icon={<GrCluster />} onClick={handleClustering} variant="subtle"/>
           </Tooltip>
           <Tooltip content="Cluster notes" sideOffset={16} side="right">
             <Button icon={<GrCluster />} onClick={handleClustering} variant="subtle"/>
