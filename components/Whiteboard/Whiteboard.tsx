@@ -383,10 +383,10 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 
       {!isReadOnly && (
         <div className={styles.toolbar}>
-          <Tooltip content="Add category" sideOffset={16}>
+          <Tooltip content="Add category" sideOffset={16} side="right">
             <Button icon={<CategoriesIcon />} onClick={insertCategory} variant="subtle" />
           </Tooltip>
-          <Tooltip content="Add note" sideOffset={16}>
+          <Tooltip content="Add note" sideOffset={16} side="right">
             <Button icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
           </Tooltip>
           <Tooltip content="Undo" sideOffset={16} side="right">
@@ -397,7 +397,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
-          <Tooltip content="Redo" sideOffset={16}>
+          <Tooltip content="Redo" sideOffset={16} side="right">
             <Button
               disabled={!canRedo}
               icon={<RedoIcon />}
