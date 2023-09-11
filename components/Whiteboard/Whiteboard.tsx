@@ -11,7 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { PlusIcon, RedoIcon, UndoIcon } from "../../icons";
+import { PlusIcon, RedoIcon, UndoIcon, CategoriesIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import {
   UserMeta,
@@ -29,8 +29,11 @@ import { useBoundingClientRectRef } from "../../utils";
 import { Cursors } from "../Cursors";
 import { Chat } from "../Chat";
 import { WhiteboardNote } from "./WhiteboardNote";
+import { WhiteboardCategory } from "./WhiteboardCategory";
 import styles from "./Whiteboard.module.css";
 import { PopupForm } from "./PopupForm";
+import { colors } from "../../data/colors";
+
 
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
@@ -43,7 +46,12 @@ interface Props extends ComponentProps<"div"> {
  */
 
 export function Whiteboard() {
+
+
+
   const { data: session } = useSession();
+
+
 
   const loading = (
     <div className={styles.loading}>
@@ -60,9 +68,21 @@ export function Whiteboard() {
 
 // The main Liveblocks code, handling all events and note modifications
 function Canvas({ currentUser, className, style, ...props }: Props) {
+
+  
+  
+  const categories = useStorage(root => root.categories);
+  console.log(categories)
+
   // An array of every note id
   const noteIds: string[] = useStorage(
     (root) => Array.from(root.notes.keys()),
+    shallow
+  );
+
+  // An array of every category id
+  const categoryIds: string[] = useStorage(
+    (root) => Array.from(root.categories?.keys() ?? []), 
     shallow
   );
 
@@ -103,6 +123,24 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     storage.get("notes").set(noteId, note);
   }, []);
 
+  // Insert a new category onto the canvas
+  const insertCategory = useMutation(({ storage, self }) => {
+    if (self.isReadOnly) {
+      return;
+    }
+
+    const categoryId = nanoid();
+    const category = new LiveObject({
+      x: getRandomInt(300),
+      y: getRandomInt(300),
+      title: "",
+      color: getRandomCategoryColor(),
+      selectedBy: null,
+      id: categoryId,
+    });
+    storage.get("categories").set(categoryId, category);
+  }, []);
+
   // Delete a note
   const handleNoteDelete = useMutation(({ storage, self }, noteId) => {
     if (self.isReadOnly) {
@@ -110,6 +148,26 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     }
 
     storage.get("notes").delete(noteId);
+  }, []);
+
+  const handleCategoryDelete = useMutation(({ storage, self }, categoryId) => {
+    if (self.isReadOnly) {
+      return;
+    }
+
+    storage.get("categories").delete(categoryId);
+  }, []);
+
+  // Update a note, if it exists
+  const handleCategoryUpdate = useMutation(({ storage, self }, categoryId, updates) => {
+    if (self.isReadOnly) {
+      return;
+    }
+
+    const category = storage.get("categories").get(categoryId);
+    if (category) {
+      category.update(updates);
+    }
   }, []);
 
   // Update a note, if it exists
@@ -123,6 +181,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       note.update(updates);
     }
   }, []);
+
 
   // Extract All Notes, that exist in this whiteboard.
   //TODO: I do not believe useMutation is the right hook to use here, I will update this code later on.
@@ -198,7 +257,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     e: ChangeEvent<HTMLTextAreaElement>,
     noteId: string
   ) {
-    handleNoteUpdate(noteId, { tag: e.target.value, selectedBy: currentUser});
+    handleNoteUpdate(noteId, { tag: e.target.value, selectedBy: currentUser });
   }
 
   // When note title is changed, update the text and selected user on the LiveObject
@@ -229,46 +288,29 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     history.resume();
   }
 
+  // When category title is changed, update the text and selected user on the LiveObject
+  function handleCategoryTitleChange(
+    e: ChangeEvent<HTMLTextAreaElement>,
+    categoryId: string
+  ) {
+    handleCategoryUpdate(categoryId, { title: e.target.value, selectedBy: currentUser });
+  }
+
   interface FormData {
     title: string;
     category: string;
   }
 
-  // const [isFormVisible, setFormVisibility] = useState(false);
 
-  // const handleSubmitNote = ({ title, category }: FormData) => {
-  //   // Handle the submitted data (title and category)
-  //   console.log(`Title: ${title}, Category: ${category}`);
+  const notes = useStorage((root) => root.notes);
 
-    // const mutation = useMutation(({ storage, self }) => {
-    //   if (self.isReadOnly) {
-    //     return;
-    //   }
-  
-    //   const noteId = nanoid();
-    //   const note = new LiveObject({
-    //     x: getRandomInt(300),
-    //     y: getRandomInt(300),
-    //     title: title,
-    //     text: "",
-    //     color: getRandomColor(),
-    //     selectedBy: null,
-    //     id: noteId,
-    //   });
-    //   storage.get("notes").set(noteId, note);
-    // }, []);
-
-    // // Executing the mutation!
-    // mutation();
-
-    // Close the form after submission
-  //   setFormVisibility(false);
-  // };
-
+  // console.log("Notes:", notes)
 
   return (
+
+
     <div
-      className={clsx(className, styles.canvas)}
+      className={clsx(className, styles.canvas, 'flex')}
       onPointerMove={handleCanvasPointerMove}
       onPointerUp={handleCanvasPointerUp}
       ref={canvasRef}
@@ -295,15 +337,30 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           />
         ))
       }
+      {
+        /*
+         * Iterate through each note in the LiveMap and render it as a note
+         */
+        categoryIds.map((id) => (
+          <WhiteboardCategory
+            id={id}
+            key={id}
+            onTitleChange={(e) => handleCategoryTitleChange(e, id)}
+            onDelete={() => handleCategoryDelete(id)}
+            // onFocus={(e) => handleNoteFocus(e, id)}
+            // onPointerDown={(e) => handleNotePointerDown(e, id)}
+          />
+        ))
+      }
 
       {!isReadOnly && (
         <div className={styles.toolbar}>
+          <Tooltip content="Add category" sideOffset={16}>
+            <Button icon={<CategoriesIcon />} onClick={insertCategory} variant="subtle" />
+          </Tooltip>
           <Tooltip content="Add note" sideOffset={16}>
             <Button icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
           </Tooltip>
-          {/* <Tooltip content="Test Add note" sideOffset={16}>
-            <button onClick={() => setFormVisibility(true)}>Show Form</button>
-          </Tooltip> */}
           <Tooltip content="Undo" sideOffset={16}>
             <Button
               disabled={!canUndo}
@@ -337,9 +394,85 @@ function getRandomInt(max: number) {
 }
 
 function getRandomColor(): string {
-  const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
+  // const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
+  // const colors = [
+  //   "#fff9c2",
+  //   "#fffde7",
+  //   "#fffabd",
+  //   "#ffe8d6",
+  //   "#ffdfab",
+  //   "#ffecb3",
+  //   "#e6ffed", 
+  //   "#d9f2d6",
+  //   "#deffe6",
+  //   "#dbeffb",
+  //   "#cfe2f3",
+  //   "#becfe8",
+  //   "#e6e6fa",
+  //   "#f5ebf5",
+  //   "#f6f0fd",
   
+  //   // More colors
+  //   "#ffd3b6", // pink
+  //   "#f8bbd0", // light pink
+  //   "#e1bee7", // purple
+  //   "#c5cae9", // lavender
+  //   "#bbdefb", // light blue
+  //   "#b2ebf2", // sky blue 
+  //   "#b2dfdb", // teal  
+  //   "#c8e6c9", // light green
+  //   "#dcedc8", // lime green
+  //   "#fff59d", // pale yellow
+  //   "#ffecb3", // lemon
+  //   "#ffccbc", // peach
+  // ];
+  const colors = [
+    "#fff9c2", // soft yellow
+    "#ffecb3", // pale yellow
+    "#ffd3b6", // pink
+    "#f8bbd0", // light pink  
+    "#c5cae9", // lavender
+    "#e1bee7", // pale purple
+    "#dcedc8", // lime green
+    "#c8e6c9", // light green
+    "#b2dfdb", // teal
+    "#bbdefb", // light blue
+    
+    // New colors for black text
+    "#f6f6f6", // light grey
+    "#fff5e1", // cream
+    "#f3e5f5", // rose
+    "#e1f5fe", // sky blue
+    "#e3fdfd", // pale cyan
+    "#f0fdf4", // mint
+    "#f1f8e9", // khaki
+
+    // Origional colors
+    "#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"
+  ];
   const randomColor = colors[getRandomInt(colors.length)];
 
   return randomColor;
+}
+
+
+// Array of possible colors
+// const colors = ["pink", "blue", "green", "yellow", "purple"]; 
+
+// Keep track of used colors
+const usedColors = new Set();
+
+// Get a random unused color
+function getRandomCategoryColor() {
+
+  // Filter unused colors
+  const availableColors = colors.filter(color => !usedColors.has(color));
+
+  // Pick random color
+  const color = availableColors[Math.floor(Math.random() * availableColors.length)];
+
+  // Mark color as used
+  usedColors.add(color);
+
+  return color;
 }

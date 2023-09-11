@@ -100,7 +100,7 @@ export const WhiteboardNote = memo(
         style={{
           transform: `translate(${x}px, ${y}px)`,
           transition: dragged ? "none" : undefined,
-          zIndex: dragged ? 1 : 0,
+          zIndex: dragged ? 2 : 1,
           cursor: dragged ? "grabbing" : "grab",
           ...style,
         }}
@@ -153,7 +153,7 @@ export const WhiteboardNote = memo(
               ) : null}
             </div>
           </div>
-          <div>
+          <div >
             <div className={styles.textAreaSize}>{title + " "}</div>
             <textarea
                 className={styles.title}
@@ -163,7 +163,7 @@ export const WhiteboardNote = memo(
                 onKeyDown={handleEnterKeyPress}
                 onPointerDown={(e) => e.stopPropagation()}
                 placeholder="Title..."
-                // rows={1}
+                rows={1}
                 ref={titleAreaRef}
                 value={title}
               /> 

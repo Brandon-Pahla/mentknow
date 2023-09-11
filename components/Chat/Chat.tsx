@@ -59,9 +59,10 @@ export function Chat({ currentUser }: Props) {
     const updateMyPresence = useUpdateMyPresence();
     const messages = useStorage((root) => root.messages);
 
-    const notes = useStorage((root) => root.notes);
+    // const notes = useStorage((root) => root.notes);
 
     // console.log("Notes:",notes)
+    // console.log("Notes:",messages)
 
     const sendMessage = useMutation(({ storage }, text, timestamp, sender, color) => {
         storage.get("messages").push(new LiveObject({ text, timestamp,sender, color }));

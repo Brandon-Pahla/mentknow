@@ -18,3 +18,4 @@ export * from "./Redo";
 export * from "./Copy";
 export * from "./User";
 export * from "./Users";
+export * from "./PlusCategory";

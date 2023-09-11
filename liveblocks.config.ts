@@ -68,8 +68,19 @@ export type Note = LiveObject<{
   color: string;
   selectedBy: UserMeta["info"] | null;
   id: string;
+}>;
+
+export type Category = LiveObject<{
+  x: number;
+  y: number;
+  title: string
+  color: string;
+  selectedBy: UserMeta["info"] | null;
+  id: string;
   // category: string;
 }>;
+
+export type Categories = LiveMap<string, Category>;
 
 export type Notes = LiveMap<string, Note>;
 
@@ -79,6 +90,7 @@ export type Notes = LiveMap<string, Note>;
 // automatically persisted and synced to all connected clients.
 type Storage = {
   notes: Notes;
+  categories: Categories;
   messages: LiveList<LiveObject<Message>>;
 };
 
