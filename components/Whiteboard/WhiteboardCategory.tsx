@@ -17,6 +17,7 @@ import { getRandom } from "../../lib/server";
 interface Props extends Omit<ComponentProps<"div">, "id" | "onBlur" | "onChange" | "onFocus"> {
   id: string;
   onTitleChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onTagChange: ChangeEventHandler<HTMLTextAreaElement>;
   onDelete: () => void;
 }
 
@@ -26,8 +27,9 @@ interface Props extends Omit<ComponentProps<"div">, "id" | "onBlur" | "onChange"
 
 
 
-export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleChange, style, className, ...props }: Props) => {
+export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleChange, onTagChange, style, className, ...props }: Props) => {
   const titleAreaRef = useRef<HTMLTextAreaElement>(null);
+  const tagAreaRef = useRef<HTMLTextAreaElement>(null);
   const category = useStorage((root) => root.categories.get(id));
 
   const handleDoubleClick = useCallback(() => {
@@ -38,6 +40,7 @@ export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleCh
     (event: KeyboardEvent<HTMLTextAreaElement>) => {
       if (event.key === "Escape") {
         titleAreaRef.current?.blur();
+        tagAreaRef.current?.blur();
       }
     },
     []
@@ -47,10 +50,10 @@ export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleCh
     return null;
   }
 
-  const { x, y, title, color, selectedBy } = category;
+  const { x, y, title, tag, color, selectedBy } = category;
 
 
-  console.log("Color: ", color)
+  // console.log("Color: ", color)
 
   return (
     <div
@@ -58,6 +61,7 @@ export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleCh
       data-note={id}
       onDoubleClick={handleDoubleClick}
       onPointerDown={onPointerDown}
+      
       style={{borderColor: color, left: 0, top: 0, zIndex: 0, ...style }}
       {...props}
     >
@@ -67,6 +71,20 @@ export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleCh
         >
           Delete
         </button>
+        <textarea
+                className="
+                  bg-transparent absolute max-h-24 w-8 right-14	leading-6 shadow-none border-0 whitespace-nowrap
+                  outline-none resize-none text-base font-light block break-word justify-center
+                "
+                onChange={onTagChange}
+                // onFocus={onFocus}
+                onKeyDown={handleEnterKeyPress}
+                onPointerDown={(e) => e.stopPropagation()}
+                placeholder="Tag"
+                ref={tagAreaRef}
+                rows={1}
+                value={tag}
+        />
       <div className={clsx("w-3/4 max-w-4/5 font-semibold")}>
         <textarea
           className={clsx("bg-transparent outline-none resize-none text-wrap break-words w-full ")}
