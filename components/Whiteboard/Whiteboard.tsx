@@ -33,7 +33,7 @@ import { WhiteboardNote } from "./WhiteboardNote";
 import styles from "./Whiteboard.module.css";
 import { PopupForm } from "./PopupForm";
 
-const DIVIDERATIO: number = 350;
+const DIVIDERATIO: number = 390;
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
 }
@@ -164,7 +164,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 
   }, [])
 
-  const handleClustering = useMutation( ({ storage, self }) => {
+  const handleClustering = useMutation( ({ storage }) => {
     for ( var noteId of noteIds ) {
       let note = storage.get("notes").get(noteId);
       if ( note ) {
