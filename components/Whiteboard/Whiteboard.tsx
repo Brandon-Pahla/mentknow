@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { BsDownload } from "react-icons/bs"
+import { GrCluster } from "react-icons/gr"
 import { LiveObject, shallow } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { nanoid } from "nanoid";
@@ -35,6 +36,7 @@ import { PopupForm } from "./PopupForm";
 import { colors } from "../../data/colors";
 
 
+const DIVIDERATIO: number = 390;
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
 }
@@ -85,6 +87,21 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     (root) => Array.from(root.categories?.keys() ?? []), 
     shallow
   );
+
+  // Keep track of the unique tags we have
+  const noteTags: string[] = useStorage(
+    (root) => {
+      const uniqueTags = new Set<string>();
+      noteIds.forEach((id) => {
+        let note = root.notes.get(id);
+        if (note) {
+          uniqueTags.add(note.tag);
+        }
+      });
+      return Array.from(uniqueTags);
+    }
+  );
+  
 
   const history = useHistory();
   const canUndo = useCanUndo();
@@ -204,6 +221,17 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       }
     });
 
+  }, [])
+
+  const handleClustering = useMutation( ({ storage }) => {
+    for ( var noteId of noteIds ) {
+      let note = storage.get("notes").get(noteId);
+      if ( note ) {
+        let offSet = noteTags.indexOf(note.get("tag"));
+        let new_x_coord = DIVIDERATIO*offSet;
+        handleNoteUpdate(noteId, { x: new_x_coord });
+      }
+    }
   }, [])
 
   // On note pointer down, pause history, set dragged note
@@ -379,6 +407,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
           <Tooltip content="Extract notes" sideOffset={16}>
             <Button icon={<BsDownload />} onClick={extractNotes} variant="subtle" />
+          </Tooltip>
+          <Tooltip content="Cluster notes" sideOffset={16} side="right">
+            <Button icon={<GrCluster />} onClick={handleClustering} variant="subtle"/>
           </Tooltip>
         </div>
 
