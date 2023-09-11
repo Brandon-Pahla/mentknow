@@ -107,7 +107,8 @@ export const WhiteboardNote = memo(
         }}
         {...props}
       >
-        <div className={styles.note}
+        <div
+          className={styles.note}
           style={{
             backgroundColor: color,
             ...style,
@@ -121,10 +122,12 @@ export const WhiteboardNote = memo(
               variant="subtle"
             /> */}
             <div>
-              <div className="
+              <div
+                className="
                 leading-6 max-h-8 overflow-hidden w-full whitespace-pre-wrap break-words
                 invisible relative
-              ">
+              "
+              >
                 {tag + " "}
               </div>
               <textarea
@@ -154,7 +157,7 @@ export const WhiteboardNote = memo(
               ) : null}
             </div>
           </div>
-          <div >
+          <div>
             <div className={styles.textAreaSize}>{title + " "}</div>
             <textarea
               className={styles.title}

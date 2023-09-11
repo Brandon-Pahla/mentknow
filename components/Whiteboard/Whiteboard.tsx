@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { BsDownload } from "react-icons/bs"
-import { GrCluster } from "react-icons/gr"
+import { BsDownload } from "react-icons/bs";
+import { GrCluster } from "react-icons/gr";
 import { LiveObject, shallow } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { nanoid } from "nanoid";
@@ -35,7 +35,6 @@ import styles from "./Whiteboard.module.css";
 import { PopupForm } from "./PopupForm";
 import { colors } from "../../data/colors";
 
-
 const DIVIDERATIO: number = 390;
 interface Props extends ComponentProps<"div"> {
   currentUser: UserMeta["info"] | null;
@@ -48,12 +47,7 @@ interface Props extends ComponentProps<"div"> {
  */
 
 export function Whiteboard() {
-
-
-
   const { data: session } = useSession();
-
-
 
   const loading = (
     <div className={styles.loading}>
@@ -70,11 +64,8 @@ export function Whiteboard() {
 
 // The main Liveblocks code, handling all events and note modifications
 function Canvas({ currentUser, className, style, ...props }: Props) {
-
-  
-  
-  const categories = useStorage(root => root.categories);
-  console.log(categories)
+  const categories = useStorage((root) => root.categories);
+  console.log(categories);
 
   // An array of every note id
   const noteIds: string[] = useStorage(
@@ -84,24 +75,21 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 
   // An array of every category id
   const categoryIds: string[] = useStorage(
-    (root) => Array.from(root.categories?.keys() ?? []), 
+    (root) => Array.from(root.categories?.keys() ?? []),
     shallow
   );
 
   // Keep track of the unique tags we have
-  const noteTags: string[] = useStorage(
-    (root) => {
-      const uniqueTags = new Set<string>();
-      noteIds.forEach((id) => {
-        let note = root.notes.get(id);
-        if (note) {
-          uniqueTags.add(note.tag);
-        }
-      });
-      return Array.from(uniqueTags);
-    }
-  );
-  
+  const noteTags: string[] = useStorage((root) => {
+    const uniqueTags = new Set<string>();
+    noteIds.forEach((id) => {
+      let note = root.notes.get(id);
+      if (note) {
+        uniqueTags.add(note.tag);
+      }
+    });
+    return Array.from(uniqueTags);
+  });
 
   const history = useHistory();
   const canUndo = useCanUndo();
@@ -177,16 +165,19 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
   }, []);
 
   // Update a note, if it exists
-  const handleCategoryUpdate = useMutation(({ storage, self }, categoryId, updates) => {
-    if (self.isReadOnly) {
-      return;
-    }
+  const handleCategoryUpdate = useMutation(
+    ({ storage, self }, categoryId, updates) => {
+      if (self.isReadOnly) {
+        return;
+      }
 
-    const category = storage.get("categories").get(categoryId);
-    if (category) {
-      category.update(updates);
-    }
-  }, []);
+      const category = storage.get("categories").get(categoryId);
+      if (category) {
+        category.update(updates);
+      }
+    },
+    []
+  );
 
   // Update a note, if it exists
   const handleNoteUpdate = useMutation(({ storage, self }, noteId, updates) => {
@@ -199,7 +190,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       note.update(updates);
     }
   }, []);
-
 
   // Extract All Notes, that exist in this whiteboard.
   //TODO: I do not believe useMutation is the right hook to use here, I will update this code later on.
@@ -221,19 +211,18 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
         console.log("+++++++++++");
       }
     });
+  }, []);
 
-  }, [])
-
-  const handleClustering = useMutation( ({ storage }) => {
-    for ( var noteId of noteIds ) {
+  const handleClustering = useMutation(({ storage }) => {
+    for (var noteId of noteIds) {
       let note = storage.get("notes").get(noteId);
-      if ( note ) {
+      if (note) {
         let offSet = noteTags.indexOf(note.get("tag"));
-        let new_x_coord = DIVIDERATIO*offSet;
+        let new_x_coord = DIVIDERATIO * offSet;
         handleNoteUpdate(noteId, { x: new_x_coord });
       }
     }
-  }, [])
+  }, []);
 
   // On note pointer down, pause history, set dragged note
   function handleNotePointerDown(
@@ -294,7 +283,10 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     e: ChangeEvent<HTMLTextAreaElement>,
     noteId: string
   ) {
-    handleNoteUpdate(noteId, { title: e.target.value, selectedBy: currentUser });
+    handleNoteUpdate(noteId, {
+      title: e.target.value,
+      selectedBy: currentUser,
+    });
   }
 
   // When note text is changed, update the text and selected user on the LiveObject
@@ -322,7 +314,10 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     e: ChangeEvent<HTMLTextAreaElement>,
     categoryId: string
   ) {
-    handleCategoryUpdate(categoryId, { tag: e.target.value, selectedBy: currentUser });
+    handleCategoryUpdate(categoryId, {
+      tag: e.target.value,
+      selectedBy: currentUser,
+    });
   }
 
   // When category title is changed, update the text and selected user on the LiveObject
@@ -330,7 +325,10 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     e: ChangeEvent<HTMLTextAreaElement>,
     categoryId: string
   ) {
-    handleCategoryUpdate(categoryId, { title: e.target.value, selectedBy: currentUser });
+    handleCategoryUpdate(categoryId, {
+      title: e.target.value,
+      selectedBy: currentUser,
+    });
   }
 
   interface FormData {
@@ -338,16 +336,13 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     category: string;
   }
 
-
   const notes = useStorage((root) => root.notes);
 
   // console.log("Notes:", notes)
 
   return (
-
-
     <div
-      className={clsx(className, styles.canvas, 'flex')}
+      className={clsx(className, styles.canvas, "flex")}
       onPointerMove={handleCanvasPointerMove}
       onPointerUp={handleCanvasPointerUp}
       ref={canvasRef}
@@ -394,7 +389,11 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       {!isReadOnly && (
         <div className={styles.toolbar}>
           <Tooltip content="Add category" sideOffset={16} side="right">
-            <Button icon={<CategoriesIcon />} onClick={insertCategory} variant="subtle" />
+            <Button
+              icon={<CategoriesIcon />}
+              onClick={insertCategory}
+              variant="subtle"
+            />
           </Tooltip>
           <Tooltip content="Add note" sideOffset={16} side="right">
             <Button icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
@@ -416,10 +415,13 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             />
           </Tooltip>
           <Tooltip content="Cluster notes" sideOffset={16} side="right">
-            <Button icon={<GrCluster />} onClick={handleClustering} variant="subtle"/>
+            <Button
+              icon={<GrCluster />}
+              onClick={handleClustering}
+              variant="subtle"
+            />
           </Tooltip>
         </div>
-
       )}
       {/* {isFormVisible && <PopupForm onSubmit={handleSubmitNote} />} */}
       <Chat currentUser={currentUser} />
@@ -440,7 +442,7 @@ function getRandomColor(): string {
   //   "#ffe8d6",
   //   "#ffdfab",
   //   "#ffecb3",
-  //   "#e6ffed", 
+  //   "#e6ffed",
   //   "#d9f2d6",
   //   "#deffe6",
   //   "#dbeffb",
@@ -449,15 +451,15 @@ function getRandomColor(): string {
   //   "#e6e6fa",
   //   "#f5ebf5",
   //   "#f6f0fd",
-  
+
   //   // More colors
   //   "#ffd3b6", // pink
   //   "#f8bbd0", // light pink
   //   "#e1bee7", // purple
   //   "#c5cae9", // lavender
   //   "#bbdefb", // light blue
-  //   "#b2ebf2", // sky blue 
-  //   "#b2dfdb", // teal  
+  //   "#b2ebf2", // sky blue
+  //   "#b2dfdb", // teal
   //   "#c8e6c9", // light green
   //   "#dcedc8", // lime green
   //   "#fff59d", // pale yellow
@@ -468,14 +470,14 @@ function getRandomColor(): string {
     "#fff9c2", // soft yellow
     "#ffecb3", // pale yellow
     "#ffd3b6", // pink
-    "#f8bbd0", // light pink  
+    "#f8bbd0", // light pink
     "#c5cae9", // lavender
     "#e1bee7", // pale purple
     "#dcedc8", // lime green
     "#c8e6c9", // light green
     "#b2dfdb", // teal
     "#bbdefb", // light blue
-    
+
     // New colors for black text
     "#f6f6f6", // light grey
     "#fff5e1", // cream
@@ -486,28 +488,31 @@ function getRandomColor(): string {
     "#f1f8e9", // khaki
 
     // Origional colors
-    "#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"
+    "#ff7eb9",
+    "#ff65a3",
+    "#7afcff",
+    "#feff9c",
+    "#fff740",
   ];
   const randomColor = colors[getRandomInt(colors.length)];
 
   return randomColor;
 }
 
-
 // Array of possible colors
-// const colors = ["pink", "blue", "green", "yellow", "purple"]; 
+// const colors = ["pink", "blue", "green", "yellow", "purple"];
 
 // Keep track of used colors
 const usedColors = new Set();
 
 // Get a random unused color
 function getRandomCategoryColor() {
-
   // Filter unused colors
-  const availableColors = colors.filter(color => !usedColors.has(color));
+  const availableColors = colors.filter((color) => !usedColors.has(color));
 
   // Pick random color
-  const color = availableColors[Math.floor(Math.random() * availableColors.length)];
+  const color =
+    availableColors[Math.floor(Math.random() * availableColors.length)];
 
   // Mark color as used
   usedColors.add(color);
