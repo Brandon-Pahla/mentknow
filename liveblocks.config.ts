@@ -68,6 +68,7 @@ export type Note = LiveObject<{
   color: string;
   selectedBy: UserMeta["info"] | null;
   id: string;
+  // category: string;
 }>;
 
 export type Category = LiveObject<{
