@@ -77,7 +77,7 @@ export type Category = LiveObject<{
   color: string;
   selectedBy: UserMeta["info"] | null;
   id: string;
-  // category: string;
+  tag: string;
 }>;
 
 export type Categories = LiveMap<string, Category>;

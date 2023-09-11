@@ -151,6 +151,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       x: getRandomInt(300),
       y: getRandomInt(300),
       title: "",
+      tag: "",
       color: getRandomCategoryColor(),
       selectedBy: null,
       id: categoryId,
@@ -316,6 +317,14 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     history.resume();
   }
 
+  //When note tag is change, update the text and selected user on the liveObject
+  function handleCategoryTagChange(
+    e: ChangeEvent<HTMLTextAreaElement>,
+    categoryId: string
+  ) {
+    handleCategoryUpdate(categoryId, { tag: e.target.value, selectedBy: currentUser });
+  }
+
   // When category title is changed, update the text and selected user on the LiveObject
   function handleCategoryTitleChange(
     e: ChangeEvent<HTMLTextAreaElement>,
@@ -375,6 +384,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             key={id}
             onTitleChange={(e) => handleCategoryTitleChange(e, id)}
             onDelete={() => handleCategoryDelete(id)}
+            onTagChange={(e) => handleCategoryTagChange(e, id)}
             // onFocus={(e) => handleNoteFocus(e, id)}
             // onPointerDown={(e) => handleNotePointerDown(e, id)}
           />

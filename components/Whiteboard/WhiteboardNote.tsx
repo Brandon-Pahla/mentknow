@@ -96,6 +96,7 @@ export const WhiteboardNote = memo(
         className={clsx(className, styles.container)}
         data-note={id}
         onDoubleClick={handleDoubleClick}
+        onContextMenu={onDelete}
         onPointerDown={onPointerDown}
         style={{
           transform: `translate(${x}px, ${y}px)`,
@@ -107,18 +108,18 @@ export const WhiteboardNote = memo(
         {...props}
       >
         <div className={styles.note}
-        style={{
-          backgroundColor: color,
-          ...style,
-        }}
+          style={{
+            backgroundColor: color,
+            ...style,
+          }}
         >
           <div className={styles.header}>
-            <Button
+            {/* <Button
               className={styles.deleteButton}
               icon={<CrossIcon />}
               onClick={onDelete}
               variant="subtle"
-            />
+            /> */}
             <div>
               <div className="
                 leading-6 max-h-8 overflow-hidden w-full whitespace-pre-wrap break-words
@@ -156,17 +157,17 @@ export const WhiteboardNote = memo(
           <div >
             <div className={styles.textAreaSize}>{title + " "}</div>
             <textarea
-                className={styles.title}
-                onBlur={onBlur}
-                onChange={onTitleChange}
-                onFocus={onFocus}
-                onKeyDown={handleEnterKeyPress}
-                onPointerDown={(e) => e.stopPropagation()}
-                placeholder="Title..."
-                rows={1}
-                ref={titleAreaRef}
-                value={title}
-              /> 
+              className={styles.title}
+              onBlur={onBlur}
+              onChange={onTitleChange}
+              onFocus={onFocus}
+              onKeyDown={handleEnterKeyPress}
+              onPointerDown={(e) => e.stopPropagation()}
+              placeholder="Title..."
+              rows={1}
+              ref={titleAreaRef}
+              value={title}
+            />
           </div>
           <div className={styles.content}>
             <div className={styles.textAreaSize}>{text + " "}</div>
