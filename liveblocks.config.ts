@@ -1,9 +1,4 @@
-import {
-  createClient,
-  LiveList,
-  LiveMap,
-  LiveObject,
-} from "@liveblocks/client";
+import { createClient, LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
 import Router from "next/router";
 import { User } from "./types";
@@ -68,7 +63,7 @@ export type Note = LiveObject<{
   x: number;
   y: number;
   tag: string;
-  title: string;
+  title: string
   text: string;
   color: string;
   selectedBy: UserMeta["info"] | null;
@@ -79,7 +74,7 @@ export type Note = LiveObject<{
 export type Category = LiveObject<{
   x: number;
   y: number;
-  title: string;
+  title: string
   color: string;
   selectedBy: UserMeta["info"] | null;
   id: string;
