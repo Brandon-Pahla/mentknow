@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { BsDownload } from "react-icons/bs"
-import { GrCluster } from "react-icons/gr"
+import { GrCluster, GrDownload } from "react-icons/gr"
 import { LiveObject, shallow } from "@liveblocks/client";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { nanoid } from "nanoid";
@@ -34,6 +34,7 @@ import { WhiteboardCategory } from "./WhiteboardCategory";
 import styles from "./Whiteboard.module.css";
 import { PopupForm } from "./PopupForm";
 import { colors } from "../../data/colors";
+// import puppeteer from "puppeteer";
 
 
 const DIVIDERATIO: number = 390;
@@ -49,11 +50,7 @@ interface Props extends ComponentProps<"div"> {
 
 export function Whiteboard() {
 
-
-
   const { data: session } = useSession();
-
-
 
   const loading = (
     <div className={styles.loading}>
@@ -71,10 +68,35 @@ export function Whiteboard() {
 // The main Liveblocks code, handling all events and note modifications
 function Canvas({ currentUser, className, style, ...props }: Props) {
 
+  // AS MAP: NOT used
+  const notes = useStorage((root) => root.notes);
+  const categories = useStorage((root) => root.categories);
+
   
   
-  const categories = useStorage(root => root.categories);
-  console.log(categories)
+  // An array of every note object
+  const noteObjects: any[] = useStorage(
+    (root) => Array.from(root.notes.values()),
+    shallow
+  );
+  // An array of every category object
+  const categoryObjects: any[] = useStorage(
+    (root) => Array.from(root.categories?.values() ?? []), 
+    shallow
+  );
+  // console.log("Notes:", noteObjects)
+  // console.log("Categories:", categoryObjects)
+
+  const handleGeneratePdf = async () => {
+    try {
+      // Call the generatePDF function and pass noteArray and categoryArray
+      await generatePDF(noteObjects, categoryObjects);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+  
+
 
   // An array of every note id
   const noteIds: string[] = useStorage(
@@ -102,7 +124,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     }
   );
   
-
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
@@ -338,11 +359,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     category: string;
   }
 
-
-  const notes = useStorage((root) => root.notes);
-
-  // console.log("Notes:", notes)
-
   return (
 
 
@@ -390,6 +406,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           />
         ))
       }
+      
 
       {!isReadOnly && (
         <div className={styles.toolbar}>
@@ -418,6 +435,9 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           <Tooltip content="Cluster notes" sideOffset={16} side="right">
             <Button icon={<GrCluster />} onClick={handleClustering} variant="subtle"/>
           </Tooltip>
+          <Tooltip content="Download PDF" sideOffset={16} side="right">
+            <Button icon={<GrDownload />} onClick={handleGeneratePdf} variant="subtle"/>
+          </Tooltip>
         </div>
 
       )}
@@ -432,7 +452,6 @@ function getRandomInt(max: number) {
 }
 
 function getRandomColor(): string {
-  // const colors = ["#ff7eb9", "#ff65a3", "#7afcff", "#feff9c", "#fff740"];
   // const colors = [
   //   "#fff9c2",
   //   "#fffde7",
@@ -491,11 +510,7 @@ function getRandomColor(): string {
   const randomColor = colors[getRandomInt(colors.length)];
 
   return randomColor;
-}
-
-
-// Array of possible colors
-// const colors = ["pink", "blue", "green", "yellow", "purple"]; 
+} 
 
 // Keep track of used colors
 const usedColors = new Set();
@@ -514,3 +529,90 @@ function getRandomCategoryColor() {
 
   return color;
 }
+
+type CategoryInfo = {
+  id: string;
+  dimensions: DOMRect;
+};
+
+
+
+
+
+
+export async function generatePDF(noteArray: any[], categoryArray: any[]) {
+  // Fetch PDF blob
+  // const res = await fetch('/api/generate-pdf');
+  // Create an object that includes both arrays
+  const requestData = {
+    noteArray,
+    categoryArray,
+  };
+
+  // Serialize the object to JSON
+  const requestDataJson = JSON.stringify(requestData);
+
+  // Fetch PDF blob
+  const res = await fetch('/api/generate-pdf', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: requestDataJson, // Send the data as JSON in the request body
+  });
+  const pdfBlob = await res.blob();
+
+  // Create a Blob URL for the PDF blob
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+
+  // Create an anchor element to trigger the download
+  const a = document.createElement('a');
+  a.href = pdfUrl;
+
+  // Set the anchor's attributes for downloading
+  a.download = 'MENTKNOW - Board Noted.pdf'; // Specify the desired file name
+  a.target = '_blank'; // Open in a new tab/window if needed
+
+  // Programmatically click the anchor to trigger the download
+  a.click();
+
+  // Revoke the Blob URL to release resources
+  URL.revokeObjectURL(pdfUrl);
+}
+
+
+
+
+function getCategoryDimensionsAndPosition(elementId: string): { dimensions: DOMRect; position: { x: number; y: number } } | null {
+  const element = document.getElementById(elementId);
+
+  if (element) {
+    const dimensions = element.getBoundingClientRect();
+    const position = {
+      x: dimensions.left,
+      y: dimensions.top,
+    };
+    
+    return { dimensions, position };
+  }
+
+  return null;
+}
+
+function getNoteCenter(noteElementId: string): { x: number; y: number } | null {
+  const noteElement = document.getElementById(noteElementId);
+
+  if (noteElement) {
+    const noteRect = noteElement.getBoundingClientRect();
+    
+    const noteCenter = {
+      x: noteRect.left + noteRect.width / 2,
+      y: noteRect.top + noteRect.height / 2,
+    };
+
+    return noteCenter;
+  }
+
+  return null;
+}
+

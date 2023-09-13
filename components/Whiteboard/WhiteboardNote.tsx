@@ -93,7 +93,7 @@ export const WhiteboardNote = memo(
 
     return (
       <div
-        className={clsx(className, styles.container)}
+        className={clsx(className, "notelement", styles.container)}
         data-note={id}
         onDoubleClick={handleDoubleClick}
         onContextMenu={onDelete}

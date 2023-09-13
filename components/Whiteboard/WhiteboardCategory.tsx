@@ -57,7 +57,7 @@ export const WhiteboardCategory = memo(({ id, onPointerDown, onDelete, onTitleCh
 
   return (
     <div
-      className={clsx(className,"relative", "border-t-4", "flex flex-1", "bg-opacity-60", "bg-white", "p-2", "shadow-md", "cursor-default")}
+      className={clsx(className, "categoryelement","relative", "border-t-4", "flex flex-1", "bg-opacity-60", "bg-white", "p-2", "shadow-md", "cursor-default")}
       data-note={id}
       onDoubleClick={handleDoubleClick}
       onPointerDown={onPointerDown}
