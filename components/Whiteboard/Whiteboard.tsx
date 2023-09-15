@@ -535,53 +535,84 @@ type CategoryInfo = {
   dimensions: DOMRect;
 };
 
-
-
-
-
-
 export async function generatePDF(noteArray: any[], categoryArray: any[]) {
-  // Fetch PDF blob
-  // const res = await fetch('/api/generate-pdf');
-  // Create an object that includes both arrays
-  const requestData = {
-    noteArray,
-    categoryArray,
-  };
+  // Create a string to represent the text content
+  let textContent = 'MENTKNOW Board Notes\n\n';
 
-  // Serialize the object to JSON
-  const requestDataJson = JSON.stringify(requestData);
+  // Loop through categoryArray and noteArray to generate content
+  for (const category of categoryArray) {
+    textContent += `#${category.tag} ${category.title}:\n`;
+    
+    // Filter notes that have the same tag as the category
+    const matchingNotes = noteArray.filter((note) => note.tag === category.tag);
+    
+    // Append matching notes to the text content
+    for (const note of matchingNotes) {
+      textContent += `- Tag: ${note.tag}\n  Title: ${note.title}\n  Text: ${note.text}\n\n`;
+    }
+  }
 
-  // Fetch PDF blob
-  const res = await fetch('/api/generate-pdf', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: requestDataJson, // Send the data as JSON in the request body
-  });
-  const pdfBlob = await res.blob();
+  // Create a Blob with the text content
+  const textBlob = new Blob([textContent], { type: 'text/plain' });
 
-  // Create a Blob URL for the PDF blob
-  const pdfUrl = URL.createObjectURL(pdfBlob);
+  // Create a Blob URL for the text blob
+  const textUrl = URL.createObjectURL(textBlob);
 
   // Create an anchor element to trigger the download
   const a = document.createElement('a');
-  a.href = pdfUrl;
+  a.href = textUrl;
 
   // Set the anchor's attributes for downloading
-  a.download = 'MENTKNOW - Board Noted.pdf'; // Specify the desired file name
+  a.download = 'MENTKNOW - Board Notes.txt'; // Specify the desired file name
   a.target = '_blank'; // Open in a new tab/window if needed
 
   // Programmatically click the anchor to trigger the download
   a.click();
 
   // Revoke the Blob URL to release resources
-  URL.revokeObjectURL(pdfUrl);
+  URL.revokeObjectURL(textUrl);
 }
 
+// FUnction to generate a PDF file:
+// export async function generatePDF(noteArray: any[], categoryArray: any[]) {
+//   // Fetch PDF blob
+//   // const res = await fetch('/api/generate-pdf');
+//   // Create an object that includes both arrays
+//   const requestData = {
+//     noteArray,
+//     categoryArray,
+//   };
 
+//   // Serialize the object to JSON
+//   const requestDataJson = JSON.stringify(requestData);
 
+//   // Fetch PDF blob
+//   const res = await fetch('/api/generate-pdf', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: requestDataJson, // Send the data as JSON in the request body
+//   });
+//   const pdfBlob = await res.blob();
+
+//   // Create a Blob URL for the PDF blob
+//   const pdfUrl = URL.createObjectURL(pdfBlob);
+
+//   // Create an anchor element to trigger the download
+//   const a = document.createElement('a');
+//   a.href = pdfUrl;
+
+//   // Set the anchor's attributes for downloading
+//   a.download = 'MENTKNOW - Board Noted.pdf'; // Specify the desired file name
+//   a.target = '_blank'; // Open in a new tab/window if needed
+
+//   // Programmatically click the anchor to trigger the download
+//   a.click();
+
+//   // Revoke the Blob URL to release resources
+//   URL.revokeObjectURL(pdfUrl);
+// }
 
 function getCategoryDimensionsAndPosition(elementId: string): { dimensions: DOMRect; position: { x: number; y: number } } | null {
   const element = document.getElementById(elementId);
