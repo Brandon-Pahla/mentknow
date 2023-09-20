@@ -12,7 +12,9 @@ export default function Drafts({
   groups,
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const thisUserEmail = useSelf().id;
+  const thisUser = session.user.info;
+
+  const thisUserEmail = thisUser.id;
 
   const isadmin = admins.includes(thisUserEmail as string);
 
