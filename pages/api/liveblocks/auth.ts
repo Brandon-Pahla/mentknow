@@ -46,7 +46,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const { data, error } = await authorize({
     roomId: roomId,
     userId: id,
-    userInfo: { name, color, avatar },
+    userInfo: { id, name, color, avatar },
     groupIds: groupIdsWithDraftsGroup,
   });
 
