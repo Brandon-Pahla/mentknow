@@ -6,11 +6,16 @@ import { DashboardLayout } from "../../../layouts/Dashboard";
 import { DocumentsLayout } from "../../../layouts/Documents";
 import * as Server from "../../../lib/server";
 import { Group } from "../../../types";
+import { useSelf } from "../../../liveblocks.config";
+import { admins } from "../../../data/users";
 
 export default function GroupPage({
   groups,
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const thisUserEmail = useSelf().id;
+
+  const isadmin = admins.includes(thisUserEmail as string);
   const router = useRouter();
 
   return (
@@ -19,6 +24,7 @@ export default function GroupPage({
         <DocumentsLayout
           filter="group"
           group={groups.find((group) => group.id === router.query.groupId)}
+          isAdmin={isadmin}
         />
       </DashboardLayout>
     </AuthenticatedLayout>

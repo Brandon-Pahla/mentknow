@@ -5,15 +5,21 @@ import { DashboardLayout } from "../../layouts/Dashboard";
 import { DocumentsLayout } from "../../layouts/Documents";
 import * as Server from "../../lib/server";
 import { Group } from "../../types";
+import { admins } from "../../data/users";
 
 export default function Index({
   groups,
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const thisUser = session.user;
+  const thisUserEmail = thisUser.info.id;
+
+  const isadmin = admins.includes(thisUserEmail as string);
+
   return (
     <AuthenticatedLayout session={session}>
       <DashboardLayout groups={groups}>
-        <DocumentsLayout filter="all" />
+        <DocumentsLayout filter="all" isAdmin={isadmin} />
       </DashboardLayout>
     </AuthenticatedLayout>
   );

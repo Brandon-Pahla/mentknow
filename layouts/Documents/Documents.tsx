@@ -27,11 +27,13 @@ const DOCUMENT_LOAD_LIMIT = 10;
 interface Props extends ComponentProps<"div"> {
   filter?: "all" | "drafts" | "group";
   group?: Group;
+  isAdmin: boolean;
 }
 
 export function DocumentsLayout({
   filter = "all",
   group,
+  isAdmin,
   className,
   ...props
 }: Props) {
@@ -135,7 +137,7 @@ export function DocumentsLayout({
           {group?.name ?? capitalize(filter)}
         </h1>
         <div className={styles.headerActions}>
-          {createDocumentButton}
+          {isAdmin && createDocumentButton}
         </div>
       </div>
 
