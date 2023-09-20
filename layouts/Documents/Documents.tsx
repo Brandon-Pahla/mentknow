@@ -119,7 +119,7 @@ export function DocumentsLayout({
       sideOffset={12}
     >
       <Button icon={<PlusIcon />}>
-        {group?.id ? "New document" : "New draft"}
+        {group?.id ? "New document" : "New Whiteboard"}
       </Button>
     </DocumentCreatePopover>
   );
@@ -135,20 +135,6 @@ export function DocumentsLayout({
           {group?.name ?? capitalize(filter)}
         </h1>
         <div className={styles.headerActions}>
-          <Select
-            initialValue="all"
-            items={[
-              { value: "all", title: "All" },
-              { value: "text", title: "Text", disabled: true },
-              { value: "whiteboard", title: "Whiteboard" },
-              { value: "spreadsheet", title: "Spreadsheet", disabled: true },
-            ]}
-            onChange={(value: "all" | DocumentType) => {
-              setDocumentType(value);
-              revalidateDocuments();
-            }}
-            className={styles.headerSelect}
-          />
           {createDocumentButton}
         </div>
       </div>

@@ -49,45 +49,15 @@ export function DocumentCreatePopover({
   }
 
   return (
-    <Popover
-      content={
-        <div className={styles.popover}>
-          <Button
-            disabled
-            icon={<PlusIcon />}
-            onClick={() => {
-              createNewDocument(documentName, "text");
-            }}
-            variant="subtle"
-          >
-            Text
-          </Button>
-          <Button
-            icon={<PlusIcon />}
-            onClick={() => {
-              createNewDocument(documentName, "whiteboard");
-            }}
-            variant="subtle"
-          >
-            Whiteboard
-          </Button>
-          <Button
-            disabled
-            icon={<PlusIcon />}
-            onClick={() => {
-              createNewDocument(documentName, "spreadsheet");
-            }}
-            variant="subtle"
-          >
-            Spreadsheet
-          </Button>
-        </div>
-      }
-      modal
-      side="bottom"
-      {...props}
+    <Button
+      icon={<PlusIcon />}
+      onClick={() => {
+        createNewDocument(documentName, "whiteboard");
+      }}
+      variant="subtle"
+      className="font-bold"
     >
-      {children}
-    </Popover>
+      Whiteboard
+    </Button>
   );
 }
