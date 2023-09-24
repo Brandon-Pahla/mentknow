@@ -9,7 +9,6 @@ import { User } from "../types";
  * Group info is in /data/groups.ts
  */
 export const users: Omit<User, "color">[] = [
-
   {
     id: "mtalifhani54@gmail.com",
     name: "Talifhani Mulaudzi",
@@ -48,3 +47,5 @@ export const users: Omit<User, "color">[] = [
     groupIds: ["product", "design"],
   },
 ];
+
+export const admins: string[] = ["brandon.m.paahla@gmail.com"];

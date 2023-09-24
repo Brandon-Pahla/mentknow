@@ -10,7 +10,11 @@ import {
   useDocumentsFunctionSWR,
   getDocumentAccess,
 } from "../../lib/client";
-import { useBroadcastEvent, useEventListener } from "../../liveblocks.config";
+import {
+  useBroadcastEvent,
+  useEventListener,
+  useSelf,
+} from "../../liveblocks.config";
 import { Dialog } from "../../primitives/Dialog";
 import { DocumentAccess, DocumentAccesses } from "../../types";
 import { ShareDialogDefault } from "./ShareDialogDefault";
@@ -19,6 +23,7 @@ import { ShareDialogInviteUser } from "./ShareDialogInviteUser";
 import { ShareDialogUsers } from "./ShareDialogUsers";
 import { ShareDialogGroups } from "./ShareDialogGroups";
 import styles from "./ShareDialog.module.css";
+import { admins } from "../../data/users";
 
 interface Props
   extends Omit<ComponentProps<typeof Dialog>, "content" | "title"> {
@@ -32,12 +37,21 @@ export function ShareDialog({
   documentAccesses,
   ...props
 }: Props) {
+
   const router = useRouter();
 
   const { data: session } = useSession();
   const [currentUserAccess, setCurrentUserAccess] = useState(
     DocumentAccess.NONE
   );
+
+  if (session) {
+    const userInfor = session.user.info;
+    const email = userInfor.id;
+    if (!admins.includes(email)) {
+      return null;
+    }
+  }
 
   // Get a list of users attached to the document (+ their info)
   const {

@@ -5,15 +5,23 @@ import { DashboardLayout } from "../../layouts/Dashboard";
 import { DocumentsLayout } from "../../layouts/Documents";
 import * as Server from "../../lib/server";
 import { Group } from "../../types";
+import { admins } from "../../data/users";
+import { useSelf } from "../../liveblocks.config";
 
 export default function Drafts({
   groups,
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const thisUser = session.user.info;
+
+  const thisUserEmail = thisUser.id;
+
+  const isadmin = admins.includes(thisUserEmail as string);
+
   return (
     <AuthenticatedLayout session={session}>
       <DashboardLayout groups={groups}>
-        <DocumentsLayout filter="drafts" />
+        <DocumentsLayout filter="drafts" isAdmin={isadmin} />
       </DashboardLayout>
     </AuthenticatedLayout>
   );
