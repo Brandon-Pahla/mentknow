@@ -48,4 +48,7 @@ export const users: Omit<User, "color">[] = [
   },
 ];
 
-export const admins: string[] = ["brandon.m.paahla@gmail.com"];
+export const admins: string[] = [
+  "brandon.m.paahla@gmail.com",
+  "mtalifhani54@gmail.com",
+];
