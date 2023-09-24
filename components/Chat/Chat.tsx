@@ -18,7 +18,6 @@ import { FaChevronDown } from 'react-icons/fa';
 // Define a type for the User information
 type UserInfo = {
     name: string;
-    // Add other properties as needed
 };
 
 interface Props {

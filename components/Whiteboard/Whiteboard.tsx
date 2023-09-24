@@ -12,7 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { PlusIcon, RedoIcon, UndoIcon, CategoriesIcon } from "../../icons";
+import { PlusIcon, RedoIcon, UndoIcon, CategoriesIcon, LinkIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import {
   UserMeta,
@@ -34,6 +34,7 @@ import { WhiteboardCategory } from "./WhiteboardCategory";
 import styles from "./Whiteboard.module.css";
 import { PopupForm } from "./PopupForm";
 import { colors } from "../../data/colors";
+import Resources from "./Resource";
 // import puppeteer from "puppeteer";
 
 const DIVIDERATIO: number = 390;
@@ -410,7 +411,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 
       {!isReadOnly && (
         <div className={styles.toolbar}>
-          
           <Tooltip content="Add category" sideOffset={16} side="right">
             <Button
               className={styles.button}
@@ -460,6 +460,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
       )}
       {/* {isFormVisible && <PopupForm onSubmit={handleSubmitNote} />} */}
       <Chat currentUser={currentUser} />
+      <Resources/>
     </div>
   );
 }

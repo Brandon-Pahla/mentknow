@@ -25,3 +25,13 @@ export interface MessageType {
   id: number;
   deleteMessage: () => void;
 }
+
+
+export interface ResourceType  {
+  owner: string;
+  timestamp: number;
+  link: string;
+  description: string;
+  id: number;
+  deleteResource: () => void;
+};

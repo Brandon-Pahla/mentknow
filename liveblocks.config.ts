@@ -57,6 +57,13 @@ export type Presence = {
   isTyping: boolean;
 };
 
+type Resource = {
+  owner: string;
+  timestamp: number;
+  link: string;
+  description: string;
+};
+
 type Message = {
   sender: string;
   timestamp: number;
@@ -90,6 +97,7 @@ export type Categories = LiveMap<string, Category>;
 
 export type Notes = LiveMap<string, Note>;
 
+
 // Optionally, Storage represents the shared document that persists in the
 // Room, even after all Users leave. Fields under Storage typically are
 // LiveList, LiveMap, LiveObject instances, for which updates are
@@ -98,6 +106,7 @@ type Storage = {
   notes: Notes;
   categories: Categories;
   messages: LiveList<LiveObject<Message>>;
+  resources: LiveList<LiveObject<Resource>>
 };
 
 export type UserInfo = Pick<User, "name" | "id" | "avatar" | "color">;

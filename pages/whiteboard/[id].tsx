@@ -61,7 +61,7 @@ export default function WhiteboardDocumentView({
     <RoomProvider
       id={id as string}
       initialPresence={{ cursor: null, isTyping: false }}
-      initialStorage={{ notes: new LiveMap(), categories: new LiveMap(), messages: new LiveList()}}
+      initialStorage={{ notes: new LiveMap(), categories: new LiveMap(), messages: new LiveList(), resources: new LiveList()}}
     >
       <DocumentLayout
         header={

@@ -21,9 +21,9 @@
   transform: translateX(-50%);
   height: fit-content;
 }
-.button{
+/* .button{
   display: block;
-}
+} */
 
 .title{
   display: none;
