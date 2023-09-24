@@ -37,11 +37,6 @@ export function ShareDialog({
   documentAccesses,
   ...props
 }: Props) {
-  const thisUserEmail = useSelf().id;
-
-  if (!admins.includes(thisUserEmail as string)) {
-    return null;
-  }
 
   const router = useRouter();
 
@@ -49,6 +44,14 @@ export function ShareDialog({
   const [currentUserAccess, setCurrentUserAccess] = useState(
     DocumentAccess.NONE
   );
+
+  if (session) {
+    const userInfor = session.user.info;
+    const email = userInfor.id;
+    if (!admins.includes(email)) {
+      return null;
+    }
+  }
 
   // Get a list of users attached to the document (+ their info)
   const {
