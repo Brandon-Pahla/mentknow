@@ -103,7 +103,7 @@ export function DocumentsLayout({
       >
         <div className={styles.container}>
           <div className={styles.emptyState}>
-            <p>You don’t have access to these documents.</p>
+            <p>You don't have access to these boards.</p>
           </div>
         </div>
       </Container>
@@ -119,7 +119,7 @@ export function DocumentsLayout({
       sideOffset={12}
     >
       <Button icon={<PlusIcon />}>
-        {group?.id ? "New document" : "New draft"}
+        {group?.id ? "New Board" : "New Board"}
       </Button>
     </DocumentCreatePopover>
   );
@@ -135,7 +135,7 @@ export function DocumentsLayout({
           {group?.name ?? capitalize(filter)}
         </h1>
         <div className={styles.headerActions}>
-          <Select
+          {/* <Select
             initialValue="all"
             items={[
               { value: "all", title: "All" },
@@ -148,7 +148,7 @@ export function DocumentsLayout({
               revalidateDocuments();
             }}
             className={styles.headerSelect}
-          />
+          /> */}
           {createDocumentButton}
         </div>
       </div>
@@ -178,7 +178,7 @@ export function DocumentsLayout({
             </>
           ) : (
             <div className={styles.emptyState}>
-              <p>No documents yet.</p>
+              <p>No boards yet.</p>
               {createDocumentButton}
             </div>
           )

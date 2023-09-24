@@ -17,6 +17,14 @@
   line-height: 1.25;
 }
 
+.heroTitle2 {
+  max-width: 500px;
+  margin-bottom: var(--space-9);
+  font-size: var(--size-3xl);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
 .heroLead {
   max-width: 460px;
   color: var(--color-text-lighter);

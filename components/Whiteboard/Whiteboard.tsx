@@ -400,26 +400,31 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             onTitleChange={(e) => handleCategoryTitleChange(e, id)}
             onDelete={() => handleCategoryDelete(id)}
             onTagChange={(e) => handleCategoryTagChange(e, id)}
-            // onFocus={(e) => handleNoteFocus(e, id)}
-            // onPointerDown={(e) => handleNotePointerDown(e, id)}
+          // onFocus={(e) => handleNoteFocus(e, id)}
+          // onPointerDown={(e) => handleNotePointerDown(e, id)}
           />
         ))
       }
 
+      <h3 className={styles.title}>You can only add/extract notes using this device.</h3>
+
       {!isReadOnly && (
         <div className={styles.toolbar}>
+          
           <Tooltip content="Add category" sideOffset={16} side="right">
             <Button
+              className={styles.button}
               icon={<CategoriesIcon />}
               onClick={insertCategory}
               variant="subtle"
             />
           </Tooltip>
           <Tooltip content="Add note" sideOffset={16} side="right">
-            <Button icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
+            <Button className={styles.button} icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
           </Tooltip>
           <Tooltip content="Undo" sideOffset={16} side="right">
             <Button
+              className={styles.button}
               disabled={!canUndo}
               icon={<UndoIcon />}
               onClick={history.undo}
@@ -428,6 +433,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
           <Tooltip content="Redo" sideOffset={16} side="right">
             <Button
+              className={styles.button}
               disabled={!canRedo}
               icon={<RedoIcon />}
               onClick={history.redo}
@@ -436,6 +442,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
           <Tooltip content="Cluster notes" sideOffset={16} side="right">
             <Button
+              className={styles.button}
               icon={<GrCluster />}
               onClick={handleClustering}
               variant="subtle"
@@ -443,6 +450,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
           <Tooltip content="Download PDF" sideOffset={16} side="right">
             <Button
+              className={styles.button}
               icon={<GrDownload />}
               onClick={handleGeneratePdf}
               variant="subtle"
@@ -555,10 +563,10 @@ export async function generatePDF(noteArray: any[], categoryArray: any[]) {
   // Loop through categoryArray and noteArray to generate content
   for (const category of categoryArray) {
     textContent += `#${category.tag} ${category.title}:\n`;
-    
+
     // Filter notes that have the same tag as the category
     const matchingNotes = noteArray.filter((note) => note.tag === category.tag);
-    
+
     // Append matching notes to the text content
     for (const note of matchingNotes) {
       textContent += `- Tag: ${note.tag}\n  Title: ${note.title}\n  Text: ${note.text}\n\n`;
@@ -627,35 +635,3 @@ export async function generatePDF(noteArray: any[], categoryArray: any[]) {
 //   URL.revokeObjectURL(pdfUrl);
 // }
 
-function getCategoryDimensionsAndPosition(elementId: string): { dimensions: DOMRect; position: { x: number; y: number } } | null {
-  const element = document.getElementById(elementId);
-
-  if (element) {
-    const dimensions = element.getBoundingClientRect();
-    const position = {
-      x: dimensions.left,
-      y: dimensions.top,
-    };
-
-    return { dimensions, position };
-  }
-
-  return null;
-}
-
-function getNoteCenter(noteElementId: string): { x: number; y: number } | null {
-  const noteElement = document.getElementById(noteElementId);
-
-  if (noteElement) {
-    const noteRect = noteElement.getBoundingClientRect();
-
-    const noteCenter = {
-      x: noteRect.left + noteRect.width / 2,
-      y: noteRect.top + noteRect.height / 2,
-    };
-
-    return noteCenter;
-  }
-
-  return null;
-}

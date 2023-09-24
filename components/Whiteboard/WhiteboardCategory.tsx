@@ -13,6 +13,7 @@ import { CrossIcon } from "../../icons";
 import { useStorage } from "../../liveblocks.config";
 import { Avatar } from "../../primitives/Avatar";
 import { getRandom } from "../../lib/server";
+import styles from "./WhiteboardCategory.module.css";
 
 interface Props
   extends Omit<
@@ -64,6 +65,7 @@ export const WhiteboardCategory = memo(
 
     return (
       <div
+        id={id}
         className={clsx(
           className,
           "categoryelement",
@@ -74,7 +76,8 @@ export const WhiteboardCategory = memo(
           "bg-white",
           "p-2",
           "shadow-md",
-          "cursor-default"
+          "cursor-default",
+          styles.container
         )}
         data-note={id}
         onDoubleClick={handleDoubleClick}

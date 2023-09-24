@@ -2,6 +2,7 @@ export * from "./createDocument";
 export * from "./deleteDocument";
 export * from "./getDocument";
 export * from "./getDocuments";
+export * from "./getBoadsAsAdmin";
 export * from "./getDocumentGroups";
 export * from "./getDocumentUsers";
 export * from "./getLiveUsers";

@@ -21,6 +21,48 @@
   transform: translateX(-50%);
   height: fit-content;
 }
+.button{
+  display: block;
+}
+
+.title{
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    transform: none;
+    left: 0;
+    right: 0;
+    margin: 0px 1.75rem;
+    top: 40%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .toolbar button{
+    width: fit-content;
+  }  
+  .title{
+    display: block;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    right: 0;
+    font-weight: 800;
+    text-align: center;
+    margin: 0px auto;
+    /* max-width: 10rem; */
+    width: 15rem;
+  }
+
+  .button{
+    
+  }
+  .button:nth-child(1), .button:nth-child(3), .button:nth-child(4), .button:nth-child(5){
+    display: none;
+  }
+
+}
 
 .loading {
   position: absolute;

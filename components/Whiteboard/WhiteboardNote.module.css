@@ -7,6 +7,12 @@
   transition: transform var(--transition-linear);
 }
 
+@media (max-width: 768px) {
+  .container {
+    display: none;
+  }
+}
+
 .note {
   display: flex;
   overflow: hidden;
