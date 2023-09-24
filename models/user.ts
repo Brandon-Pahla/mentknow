@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, model, Model } from 'mongoose';
 
 // Define the User interface with all properties
-interface UserType {
+export interface UserType {
     id: string;
     name: string;
     avatar?: string;
@@ -13,7 +13,7 @@ interface UserType {
 type User= Omit<UserType, "color">;
 
 // Define the Mongoose schema for the User
-const userSchema = new Schema<User>({
+export const userSchema = new Schema<User>({
     id: String,
     name: String,
     avatar: String,

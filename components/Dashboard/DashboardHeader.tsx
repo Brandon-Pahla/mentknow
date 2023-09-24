@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { ComponentProps, MouseEventHandler } from "react";
-import { CrossIcon, MenuIcon, SignOutIcon } from "../../icons";
+import { CrossIcon, MenuIcon, PlusIcon, SignOutIcon } from "../../icons";
 import { signOut, useSession } from "next-auth/react";
 import { Avatar } from "../../primitives/Avatar";
 import { Button } from "../../primitives/Button";
@@ -9,6 +9,7 @@ import { Popover } from "../../primitives/Popover";
 import { Logo } from "../Logo";
 import styles from "./DashboardHeader.module.css";
 import { Router, useRouter } from "next/router";
+import { useStorage } from "../../liveblocks.config";
 
 interface Props extends ComponentProps<"header"> {
   isOpen: boolean;
@@ -53,6 +54,14 @@ export function DashboardHeader({
                   </span>
                 </div>
                 <div className={styles.profilePopoverActions}>
+                  <div className="pb-2">
+                  <Button
+                  className={styles.profilePopoverButton}
+                  icon={<PlusIcon/>}
+                  >
+                    Add Admin
+                  </Button>
+                  </div>
                   <Button
                     className={styles.profilePopoverButton}
                     icon={<SignOutIcon />}
