@@ -39,19 +39,19 @@ interface Props
 const initialNoteTag = '';
 
 // Define a type for the note tag action
-type NoteTagAction = 
-  | {type: 'SET_NOTE_TAG', payload: string}
-  | {type: 'FORCE_RERENDER'}
+type NoteTagAction =
+  | { type: 'SET_NOTE_TAG', payload: string }
+  | { type: 'FORCE_RERENDER' }
 
 function noteTagReducer(state: any, action: NoteTagAction): string {
 
-  switch(action.type) {
-    
+  switch (action.type) {
+
     case 'SET_NOTE_TAG':
       return action.payload;
-      
-    case 'FORCE_RERENDER':  
-      return {...state}; // return updated object to force rerender
+
+    case 'FORCE_RERENDER':
+      return { ...state }; // return updated object to force rerender
 
     default:
       return state;
@@ -79,7 +79,7 @@ export const WhiteboardNote = memo(
 
     const note = useStorage((root) => root.notes.get(id));
 
-    
+
     const handleDoubleClick = useCallback(() => {
       textAreaRef.current?.focus();
       titleAreaRef.current?.focus();
@@ -205,10 +205,15 @@ export const WhiteboardNote = memo(
                   );
 
                   if (overlappingCategory) {
+
+                    // Update tag in state
+                    // dispatch({ type: 'SET_NOTE_TAG', payload: overlappingCategory.tag })
                     // Update the tag ref immediately
                     currentTagRef.current = overlappingCategory.tag;
 
                     setNoteTag(overlappingCategory.tag);
+
+                    
 
                     // Dispatch an action to set the note's tag to the category's tag
                     // dispatch({ type: 'SET_NOTE_TAG', payload: overlappingCategory.tag });
@@ -230,39 +235,40 @@ export const WhiteboardNote = memo(
       }
     }, [dragged]);
 
-return (
-  <div
-    id={id}
-    className={clsx(className, "notelement", styles.container)}
-    data-note={id}
-    onDoubleClick={handleDoubleClick}
-    onContextMenu={onDelete}
-    onPointerDown={onPointerDown}
-    style={{
-      transform: `translate(${x}px, ${y}px)`,
-      transition: dragged ? "none" : undefined,
-      zIndex: dragged ? 2 : 1,
-      cursor: dragged ? "grabbing" : "grab",
-      ...style,
-    }}
-    {...props}
-  >
-    <div
-      className={styles.note}
-      style={{
-        backgroundColor: color,
-        ...style,
-      }}
-    >
-      <div className={styles.header}>
-        {/* <Button
+    return (
+      <div
+        id={id}
+        className={clsx(className, "notelement", styles.container)}
+        data-note={id}
+        onDoubleClick={handleDoubleClick}
+        // onClick={() => onTagChange}
+        onContextMenu={onDelete}
+        onPointerDown={onPointerDown}
+        style={{
+          transform: `translate(${x}px, ${y}px)`,
+          transition: dragged ? "none" : undefined,
+          zIndex: dragged ? 2 : 1,
+          cursor: dragged ? "grabbing" : "grab",
+          ...style,
+        }}
+        {...props}
+      >
+        <div
+          className={styles.note}
+          style={{
+            backgroundColor: color,
+            ...style,
+          }}
+        >
+          <div className={styles.header}>
+            {/* <Button
               className={styles.deleteButton}
               icon={<CrossIcon />}
               onClick={onDelete}
               variant="subtle"
             /> */}
-        <div>
-          {/* <div
+            <div>
+              {/* <div
             className="
                 leading-6 max-h-8 overflow-hidden w-full whitespace-pre-wrap break-words
                 invisible relative
@@ -270,65 +276,65 @@ return (
           >
             {noteTag + " "}
           </div> */}
-          <textarea
-            className="
+              <textarea
+                className="
                   bg-transparent max-h-24	leading-6 shadow-none border-0 whitespace-nowrap
                   outline-none resize-none text-base font-light block break-word justify-center
                 "
-            onBlur={onBlur}
-            onChange={onTagChange}
-            onFocus={onFocus}
-            onKeyDown={handleEnterKeyPress}
-            onPointerDown={(e) => e.stopPropagation()}
-            placeholder="#"
-            ref={tagAreaRef}
-            rows={1}
-            value={noteTag}
-            readOnly
-          />
-        </div>
-        <div className={styles.presence}>
-          {selectedBy ? (
-            <Avatar
-              color={selectedBy.color}
-              name={selectedBy.name}
-              outline
-              src={selectedBy.avatar}
+                onBlur={onBlur}
+                onChange={onTagChange}
+                onFocus={onFocus}
+                onKeyDown={handleEnterKeyPress}
+                onPointerDown={(e) => e.stopPropagation()}
+                placeholder="#"
+                ref={tagAreaRef}
+                rows={1}
+                value={noteTag}
+                // readOnly
+              />
+            </div>
+            <div className={styles.presence}>
+              {selectedBy ? (
+                <Avatar
+                  color={selectedBy.color}
+                  name={selectedBy.name}
+                  outline
+                  src={selectedBy.avatar}
+                />
+              ) : null}
+            </div>
+          </div>
+          <div>
+            <div className={styles.textAreaSize}>{title + " "}</div>
+            <textarea
+              className={styles.title}
+              onBlur={onBlur}
+              onChange={onTitleChange}
+              onFocus={onFocus}
+              onKeyDown={handleEnterKeyPress}
+              onPointerDown={(e) => e.stopPropagation()}
+              placeholder="Title..."
+              rows={1}
+              ref={titleAreaRef}
+              value={title}
             />
-          ) : null}
+          </div>
+          <div className={styles.content}>
+            <div className={styles.textAreaSize}>{text + " "}</div>
+            <textarea
+              className={styles.textArea}
+              onBlur={onBlur}
+              onChange={onTextChange}
+              onFocus={onFocus}
+              onKeyDown={handleKeyDown}
+              onPointerDown={(e) => e.stopPropagation()}
+              placeholder="Write note…"
+              ref={textAreaRef}
+              value={text}
+            />
+          </div>
         </div>
       </div>
-      <div>
-        <div className={styles.textAreaSize}>{title + " "}</div>
-        <textarea
-          className={styles.title}
-          onBlur={onBlur}
-          onChange={onTitleChange}
-          onFocus={onFocus}
-          onKeyDown={handleEnterKeyPress}
-          onPointerDown={(e) => e.stopPropagation()}
-          placeholder="Title..."
-          rows={1}
-          ref={titleAreaRef}
-          value={title}
-        />
-      </div>
-      <div className={styles.content}>
-        <div className={styles.textAreaSize}>{text + " "}</div>
-        <textarea
-          className={styles.textArea}
-          onBlur={onBlur}
-          onChange={onTextChange}
-          onFocus={onFocus}
-          onKeyDown={handleKeyDown}
-          onPointerDown={(e) => e.stopPropagation()}
-          placeholder="Write note…"
-          ref={textAreaRef}
-          value={text}
-        />
-      </div>
-    </div>
-  </div>
-);
+    );
   }
 );

@@ -87,6 +87,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
   const handleGeneratePdf = async () => {
     try {
       // Call the generatePDF function and pass noteArray and categoryArray
+
       await generatePDF(noteObjects, categoryObjects);
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -461,7 +462,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
             />
           </Tooltip>
           )}
-          <Tooltip content="Download PDF" sideOffset={16} side="right">
+          <Tooltip content="Download Notes" sideOffset={16} side="right">
             <Button
               className={styles.button}
               icon={<GrDownload />}
@@ -471,7 +472,6 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
           </Tooltip>
         </div>
       )}
-      {/* {isFormVisible && <PopupForm onSubmit={handleSubmitNote} />} */}
       <Chat currentUser={currentUser} />
       <Resources/>
     </div>

@@ -11,17 +11,7 @@ interface Props extends ComponentProps<"div"> {
 export const DocumentLayout = forwardRef<HTMLElement, Props>(
   ({ children, header, className, ...props }, ref) => {
 
-     // // An array of every note object
-  const noteObjects: any[] = useStorage(
-    (root) => Array.from(root.notes.values()),
-    shallow
-  );
-  // An array of every category object
-  const categoryObjects: any[] = useStorage(
-    (root) => Array.from(root.categories?.values() ?? []),
-    shallow
-  );
-  console.log("CATEGORIES:", categoryObjects)
+  // console.log("CATEGORIES:", categoryObjects)
     return (
       <div className={clsx(className, styles.container)} {...props}>
         <header className={styles.header}>{header}</header>
