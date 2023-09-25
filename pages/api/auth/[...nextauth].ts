@@ -27,6 +27,7 @@ async function createUser(user: any) {
 
     // console.log("TO DATABASE User:", userData);
     
+    // console.log("AUth url", process.env.AUTH0_BASE_URL)
     // Construct the full URL to your API endpoint
     const apiUrlWithEndpoint = `${process.env.AUTH0_BASE_URL}/api/database/users`;
     // Send the user data to your database endpoint

@@ -42,13 +42,13 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
   res,
 }) => {
   const session = await Server.getServerSession(req, res);
-
+  const host = req.headers.host;
   // If not logged in, redirect to marketing page
   if (!session) {
     return {
       redirect: {
         permanent: false,
-        destination: "/signin?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F",
+        destination: `/`, //signin?callbackUrl=http://${host}/  //?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F
       },
     };
   }

@@ -5,8 +5,9 @@ import {
   DASHBOARD_DRAFTS_URL,
   DASHBOARD_GROUP_URL,
   DASHBOARD_URL,
+  ADMIN_URL,
 } from "../../constants";
-import { FileIcon, FolderIcon } from "../../icons";
+import { CategoriesIcon, FileIcon, FolderIcon } from "../../icons";
 import { LinkButton } from "../../primitives/Button";
 import { Group } from "../../types";
 import { normalizeTrailingSlash } from "../../utils";
@@ -48,6 +49,18 @@ function SidebarLink({
 }
 
 export function DashboardSidebar({ className, groups, ...props }: Props) {
+
+   // // An array of every note object
+  // const noteObjects: any[] = useStorage(
+  //   (root) => Array.from(root.notes.values()),
+  //   shallow
+  // );
+  // // An array of every category object
+  // const categoryObjects: any[] = useStorage(
+  //   (root) => Array.from(root.categories?.values() ?? []),
+  //   shallow
+  // );
+
   return (
     <div className={clsx(className, styles.sidebar)} {...props}>
       <nav className={styles.navigation}>
@@ -58,30 +71,18 @@ export function DashboardSidebar({ className, groups, ...props }: Props) {
                 All
               </SidebarLink>
             </li>
-            {/* <li>
-              <SidebarLink href={DASHBOARD_DRAFTS_URL} icon={<FileIcon />}>
-                Drafts
-              </SidebarLink>
-            </li> */}
           </ul>
         </div>
-        {/* <div className={styles.category}>
-          <span className={styles.categoryTitle}>Groups</span>
+        <div className={styles.category}>
+          {/* <span className={styles.categoryTitle}>Groups</span> */}
           <ul className={styles.list}>
-            {groups.map((group) => {
-              return (
-                <li key={group.id}>
-                  <SidebarLink
-                    href={DASHBOARD_GROUP_URL(group.id)}
-                    icon={<FolderIcon />}
-                  >
-                    {group.name}
-                  </SidebarLink>
-                </li>
-              );
-            })}
+            <li>
+              <SidebarLink href={ADMIN_URL} icon={<CategoriesIcon />}>
+                Analytics
+              </SidebarLink>
+            </li>
           </ul>
-        </div> */}
+        </div>
       </nav>
     </div>
   );

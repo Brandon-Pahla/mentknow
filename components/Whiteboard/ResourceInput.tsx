@@ -44,7 +44,7 @@ export function ResourceInput({
       />
       {/* Input field for message */}
       <input
-        className="rounded-xl border border-zinc-900 p-2 py-1 focus:outline-none focus-ring focus:border-blue-500"
+        className="mb-2 rounded-xl border border-zinc-900 p-2 focus:outline-none focus-ring focus:border-blue-500"
         type="text"
         placeholder="Link to the resource..."
         value={draft}

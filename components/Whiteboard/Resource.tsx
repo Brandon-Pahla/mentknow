@@ -38,11 +38,11 @@ const Resources: React.FC<FloatingComponentProps> = () => {
         };
     }, [opened, resources]);
 
-    return (
-        <div className="fixed bottom-12 right-4 z-50">
+    return ( //min-h-[30%] min-w-[25%]
+        <div className="fixed bottom-12 right-4 z-100000 ">
             {/* The floating button */}
             <button
-                className="bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-all delay-100"
+                className="bg-gray-500 text-white p-2 rounded-full shadow-lg hover:bg-gray-900 transition-all delay-100"
                 onClick={toggleExpansion}
             >
                 {expanded ? "-" : "+"}
@@ -50,12 +50,12 @@ const Resources: React.FC<FloatingComponentProps> = () => {
 
             {/* The expanded content */}
             {expanded && (
-                <div className="bg-white rounded-t-lg shadow-lg mt-2 transition-all delay-500 text-sm max-w-prose">
+                <div className="bg-slate-100 rounded-t-lg shadow-lg transition-all delay-500 text-sm max-w-prose">
                     <div className="bg-gray-900 text-white p-2 rounded-t-md">
                         <h2 className="text-md font-semibold">Weekly resurces</h2>
                     </div>
                     <div className="p-5">
-                        <div className="h-[190px] overflow-y-scroll pr-2" ref={msgList}>
+                        <div className="h-[190px] overflow-y-scroll pr-2 " ref={msgList}>
                             {resources.map((resource, index) => (
                                 <ResourceText
                                     key={index}

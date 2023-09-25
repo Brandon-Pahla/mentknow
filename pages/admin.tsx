@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { GetServerSideProps } from "next";
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps, ReactNode, useEffect, useState } from "react";
 import { DASHBOARD_URL } from "../constants";
 import { SignInIcon } from "../icons";
 import { AdminLayout } from "../layouts/Admin";
@@ -26,23 +26,41 @@ function Feature({ title, description, className, ...props }: FeatureProps) {
   );
 }
 
+// fetch all boards 
+async function getBoards() {
+    
+  let url = `/api/liveblocks/documents/boards`;
 
+  const response = await fetch(url);
+  return await response.json();
+}
 
 export default function Admin() {
   const { data: session } = useSession();
-  // // An array of every note object
-  // const noteObjects: any[] = useStorage(
-  //   (root) => Array.from(root.notes.values()),
-  //   shallow
-  // );
-  // // An array of every category object
-  // const categoryObjects: any[] = useStorage(
-  //   (root) => Array.from(root.categories?.values() ?? []),
-  //   shallow
-  // );
+  const [boardData, setBoardData] = useState(null);
+
+  useEffect(() => {
+    // Fetch boards when the component mounts
+    async function fetchBoards() {
+      try {
+        const boards = await getBoards();
+        setBoardData(boards);
+      } catch (error) {
+        console.error("Error fetching boards:", error);
+      }
+    }
+
+    fetchBoards();
+  }, []);
+  
+  // fetch all notes
+
+  // fetch all users
 
 
-  console.log(session?.user.info.name)
+
+
+  console.log("How many boards:", boardData)
 
   return (
     <AdminLayout>
@@ -86,33 +104,7 @@ export default function Admin() {
             }
             title="Total Number of Notes"
           />
-          {/* <Feature
-            description={
-              <>
-                All custom client and server functions are fully typed, and easy
-                to update.
-              </>
-            }
-            title="Number "
-          />
-          <Feature
-            description={
-              <>
-                Complete authentication, compatible with any NextAuth provider,
-                including GitHub, Google, Auth0, and many more.
-              </>
-            }
-            title="NextAuth.js"
-          />
-          <Feature
-            description={
-              <>
-                See data update live using the SWR (state-while-revalidate)
-                library.
-              </>
-            }
-            title="SWR"
-          /> */}
+          
         </div>
       </Container>
     </AdminLayout>
