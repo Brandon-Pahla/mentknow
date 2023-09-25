@@ -10,6 +10,7 @@ import { Logo } from "../Logo";
 import styles from "./DashboardHeader.module.css";
 import { Router, useRouter } from "next/router";
 import { useStorage } from "../../liveblocks.config";
+import { admins } from "../../data/users";
 
 interface Props extends ComponentProps<"header"> {
   isOpen: boolean;
@@ -25,6 +26,11 @@ export function DashboardHeader({
   const { data: session } = useSession();
 
   const router = useRouter()
+  let isAdmin = false;
+  if (session) {
+    const userInf = session.user.info;
+    isAdmin = admins.includes(userInf.id);
+  }
 
   return (
     <header className={clsx(className, styles.header)} {...props}>
@@ -54,20 +60,22 @@ export function DashboardHeader({
                   </span>
                 </div>
                 <div className={styles.profilePopoverActions}>
-                  <div className="pb-2">
-                  <Button
-                  className={styles.profilePopoverButton}
-                  icon={<PlusIcon/>}
-                  >
-                    Add Admin
-                  </Button>
-                  </div>
+                  {isAdmin && (
+                    <div className="pb-2">
+                      <Button
+                        className={styles.profilePopoverButton}
+                        icon={<PlusIcon />}
+                      >
+                        Add Admin
+                      </Button>
+                    </div>
+                  )}
                   <Button
                     className={styles.profilePopoverButton}
                     icon={<SignOutIcon />}
-                    onClick={() => 
+                    onClick={() =>
                       router.push('/api/auth/signout')
-                      
+
                     }
                   >
                     Sign out

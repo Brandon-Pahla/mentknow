@@ -21,6 +21,7 @@ import styles from "./Documents.module.css";
 import { DocumentRowGroup } from "../../components/Documents/DocumentRowGroup";
 import { capitalize } from "../../utils";
 
+
 // Load `x` documents at a time
 const DOCUMENT_LOAD_LIMIT = 10;
 

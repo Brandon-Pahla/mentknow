@@ -3,6 +3,7 @@ import { ComponentProps, useCallback, useState } from "react";
 import { DashboardHeader, DashboardSidebar } from "../../components/Dashboard";
 import { Group } from "../../types";
 import styles from "./Dashboard.module.css";
+import { isAdmin } from "../../pages/api/database/admins";
 
 interface Props extends ComponentProps<"div"> {
   groups: Group[];
@@ -26,7 +27,7 @@ export function DashboardLayout({
         <DashboardHeader isOpen={isMenuOpen} onMenuClick={handleMenuClick} />
       </header>
       <aside className={styles.aside} data-open={isMenuOpen || undefined}>
-        <DashboardSidebar groups={groups} />
+        <DashboardSidebar groups={groups}  /> 
       </aside>
       <main className={styles.main}>{children}</main>
     </div>

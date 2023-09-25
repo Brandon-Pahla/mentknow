@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { ComponentProps, useMemo } from "react";
+import { ComponentProps, useEffect, useMemo, useState } from "react";
 import {
   DASHBOARD_DRAFTS_URL,
   DASHBOARD_GROUP_URL,
@@ -12,7 +12,8 @@ import { LinkButton } from "../../primitives/Button";
 import { Group } from "../../types";
 import { normalizeTrailingSlash } from "../../utils";
 import styles from "./DashboardSidebar.module.css";
-import { isAdmin, updateAdminsDb, updateAdminsList } from "../../pages/api/database/admins";
+import { admins } from "../../data/users";
+import { useSession } from "next-auth/react";
 
 interface Props extends ComponentProps<"div"> {
   groups: Group[];
@@ -51,16 +52,17 @@ function SidebarLink({
 
 export function DashboardSidebar({ className, groups, ...props }: Props) {
 
-   // // An array of every note object
-  // const noteObjects: any[] = useStorage(
-  //   (root) => Array.from(root.notes.values()),
-  //   shallow
-  // );
-  // // An array of every category object
-  // const categoryObjects: any[] = useStorage(
-  //   (root) => Array.from(root.categories?.values() ?? []),
-  //   shallow
-  // );
+  // const [isAdminUser, setIsAdminUser] = useState(false);
+
+  const { data: session } = useSession();
+
+  let isAdmin = false;
+  if (session) {
+    const userInf = session.user.info;
+    isAdmin = admins.includes(userInf.id);
+  }
+
+  console.log(session)
 
   return (
     <div className={clsx(className, styles.sidebar)} {...props}>
@@ -76,13 +78,13 @@ export function DashboardSidebar({ className, groups, ...props }: Props) {
         </div>
         <div className={styles.category}>
           {/* <span className={styles.categoryTitle}>Groups</span> */}
-          <ul className={styles.list}>
+          { isAdmin && (<ul className={styles.list}>
             <li>
               <SidebarLink href={ADMIN_URL} icon={<CategoriesIcon />}>
                 Analytics
               </SidebarLink>
             </li>
-          </ul>
+          </ul>)}
         </div>
       </nav>
     </div>

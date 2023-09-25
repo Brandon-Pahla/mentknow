@@ -35,6 +35,7 @@ import styles from "./Whiteboard.module.css";
 import { PopupForm } from "./PopupForm";
 import { colors } from "../../data/colors";
 import Resources from "./Resource";
+import { admins } from "../../data/users";
 // import puppeteer from "puppeteer";
 
 const DIVIDERATIO: number = 390;
@@ -361,6 +362,14 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     category: string;
   }
 
+  const { data: session } = useSession();
+
+  let isAdmin = false;
+  if (session) {
+    const userInf = session.user.info;
+    isAdmin = admins.includes(userInf.id);
+  }
+
   return (
     <div
       className={clsx(className, styles.canvas, "flex")}
@@ -411,7 +420,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
 
       {!isReadOnly && (
         <div className={styles.toolbar}>
-          <Tooltip content="Add category" sideOffset={16} side="right">
+          {isAdmin && (
+            <Tooltip content="Add category" sideOffset={16} side="right">
             <Button
               className={styles.button}
               icon={<CategoriesIcon />}
@@ -419,6 +429,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
+          )}
           <Tooltip content="Add note" sideOffset={16} side="right">
             <Button className={styles.button} icon={<PlusIcon />} onClick={insertNote} variant="subtle" />
           </Tooltip>
@@ -440,7 +451,8 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
-          <Tooltip content="Cluster notes" sideOffset={16} side="right">
+          {isAdmin && (
+            <Tooltip content="Cluster notes" sideOffset={16} side="right">
             <Button
               className={styles.button}
               icon={<GrCluster />}
@@ -448,6 +460,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
               variant="subtle"
             />
           </Tooltip>
+          )}
           <Tooltip content="Download PDF" sideOffset={16} side="right">
             <Button
               className={styles.button}

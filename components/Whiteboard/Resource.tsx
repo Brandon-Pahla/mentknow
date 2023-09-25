@@ -3,6 +3,8 @@ import { useMutation, useStorage } from "../../liveblocks.config";
 import { LiveObject } from "@liveblocks/client";
 import { ResourceInput } from "./ResourceInput";
 import { ResourceText } from "./ResourceText";
+import { useSession } from "next-auth/react";
+import { admins } from "../../data/users";
 
 // Define the FloatingComponentProps
 interface FloatingComponentProps {
@@ -10,6 +12,13 @@ interface FloatingComponentProps {
 }
 
 const Resources: React.FC<FloatingComponentProps> = () => {
+    const { data: session } = useSession();
+    let isAdmin = false;
+  if (session) {
+    const userInf = session.user.info;
+    isAdmin = admins.includes(userInf.id);
+  }
+
     const [expanded, setExpanded] = useState(false);
 
     const resources = useStorage((root) => root.resources);
@@ -65,7 +74,8 @@ const Resources: React.FC<FloatingComponentProps> = () => {
                                     id={index} owner={resource.owner} timestamp={resource.timestamp} />
                             ))}
                         </div>
-                        <ResourceInput
+                        { isAdmin && (
+                            <ResourceInput
                             draft={draft}
                             descriptionDraft={description}
                             setDraft={setDraft}
@@ -74,6 +84,7 @@ const Resources: React.FC<FloatingComponentProps> = () => {
                             // updateMyPresence={updateMyPresence}
                             saveResource={saveResource}
                         />
+                        )}
                     </div>
                 </div>
             )}
