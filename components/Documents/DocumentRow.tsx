@@ -14,6 +14,7 @@ import { Document, DocumentAccess, Group, RoomActiveUser } from "../../types";
 import { DocumentDeleteDialog } from "./DocumentDeleteDialog";
 import { DocumentIcon } from "./DocumentIcon";
 import styles from "./DocumentRow.module.css";
+import { admins } from "../../data/users";
 
 interface Props extends ComponentProps<"div"> {
   document: Document;
@@ -35,6 +36,12 @@ export function DocumentRow({
   const [currentUserAccess, setCurrentUserAccess] = useState(
     DocumentAccess.NONE
   );
+
+  let isAdmin = false;
+  if (session) {
+    const userInf = session.user.info;
+    isAdmin = admins.includes(userInf.id);
+  }
 
   // Check if current user has access to edit the room
   useEffect(() => {
@@ -74,6 +81,37 @@ export function DocumentRow({
     }
   }, []);
 
+  const createDeleteWhiteboardButton = isAdmin ? (
+    <Popover
+      align="end"
+      content={
+        <div className={styles.morePopover}>
+          <DocumentDeleteDialog
+            documentId={document.id}
+            onDeleteDocument={revalidateDocuments}
+            onOpenChange={handleDeleteDialogOpenChange}
+          >
+            <Button icon={<DeleteIcon />} variant="subtle">
+              Delete
+            </Button>
+          </DocumentDeleteDialog>
+        </div>
+      }
+      modal
+      onOpenChange={setMoreOpen}
+      open={isMoreOpen}
+      side="bottom"
+      sideOffset={10}
+      {...props}
+    >
+      <Button
+        className={styles.moreButton}
+        icon={<MoreIcon />}
+        variant="secondary"
+      />
+    </Popover>
+  ) : null;
+
   return (
     <div className={clsx(className, styles.row)} {...props}>
       <Link className={clsx(styles.container, styles.link)} href={url}>
@@ -112,36 +150,7 @@ export function DocumentRow({
         )}
       </Link>
       {currentUserAccess === DocumentAccess.FULL ? (
-        <div className={styles.more}>
-          <Popover
-            align="end"
-            content={
-              <div className={styles.morePopover}>
-                <DocumentDeleteDialog
-                  documentId={document.id}
-                  onDeleteDocument={revalidateDocuments}
-                  onOpenChange={handleDeleteDialogOpenChange}
-                >
-                  <Button icon={<DeleteIcon />} variant="subtle">
-                    Delete
-                  </Button>
-                </DocumentDeleteDialog>
-              </div>
-            }
-            modal
-            onOpenChange={setMoreOpen}
-            open={isMoreOpen}
-            side="bottom"
-            sideOffset={10}
-            {...props}
-          >
-            <Button
-              className={styles.moreButton}
-              icon={<MoreIcon />}
-              variant="secondary"
-            />
-          </Popover>
-        </div>
+        <div className={styles.more}>{createDeleteWhiteboardButton}</div>
       ) : null}
     </div>
   );
