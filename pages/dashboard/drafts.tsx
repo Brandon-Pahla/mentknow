@@ -7,17 +7,13 @@ import * as Server from "../../lib/server";
 import { Group } from "../../types";
 import { admins } from "../../data/users";
 import { useSelf } from "../../liveblocks.config";
+import { isAdmin } from "../api/database/admins";
 
 export default function Drafts({
+  isadmin,
   groups,
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const thisUser = session.user.info;
-
-  const thisUserEmail = thisUser.id;
-
-  const isadmin = admins.includes(thisUserEmail as string);
-
   return (
     <AuthenticatedLayout session={session}>
       <DashboardLayout groups={groups}>
@@ -28,6 +24,7 @@ export default function Drafts({
 }
 
 interface ServerSideProps {
+  isadmin: boolean;
   groups: Group[];
   session: Session;
 }
@@ -38,6 +35,11 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
   res,
 }) => {
   const session = await Server.getServerSession(req, res);
+
+  const thisUser = session.user;
+  const thisUserEmail = thisUser.info.id;
+
+  const isadmin = await isAdmin(thisUserEmail);
 
   // If not logged in, redirect to marketing page
   if (!session) {
@@ -52,6 +54,6 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
   const groups = await Server.getGroups(session?.user.info.groupIds ?? []);
 
   return {
-    props: { groups, session },
+    props: { isadmin, groups, session },
   };
 };

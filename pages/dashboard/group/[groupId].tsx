@@ -8,14 +8,13 @@ import * as Server from "../../../lib/server";
 import { Group } from "../../../types";
 import { useSelf } from "../../../liveblocks.config";
 import { admins } from "../../../data/users";
+import { isAdmin } from "../../api/database/admins";
 
 export default function GroupPage({
+  isadmin,
   groups,
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const thisUserEmail = useSelf().id;
-
-  const isadmin = admins.includes(thisUserEmail as string);
   const router = useRouter();
 
   return (
@@ -32,6 +31,7 @@ export default function GroupPage({
 }
 
 interface ServerSideProps {
+  isadmin: boolean;
   groups: Group[];
   session: Session;
 }
@@ -43,6 +43,12 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
 }) => {
   const session = await Server.getServerSession(req, res);
   const host = req.headers.host;
+
+  const thisUser = session.user;
+  const thisUserEmail = thisUser.info.id;
+
+  const isadmin = await isAdmin(thisUserEmail);
+
   // If not logged in, redirect to marketing page
   if (!session) {
     return {
@@ -56,6 +62,6 @@ export const getServerSideProps: GetServerSideProps<ServerSideProps> = async ({
   const groups = await Server.getGroups(session?.user.info.groupIds ?? []);
 
   return {
-    props: { groups, session },
+    props: { isadmin, groups, session },
   };
 };
