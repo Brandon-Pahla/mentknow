@@ -2,15 +2,15 @@ import clsx from "clsx";
 import Link from "next/link";
 import { ComponentProps, MouseEventHandler } from "react";
 import { CrossIcon, MenuIcon, PlusIcon, SignOutIcon } from "../../icons";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Avatar } from "../../primitives/Avatar";
 import { Button } from "../../primitives/Button";
 import { Popover } from "../../primitives/Popover";
 import { Logo } from "../Logo";
 import styles from "./DashboardHeader.module.css";
-import { Router, useRouter } from "next/router";
-import { useStorage } from "../../liveblocks.config";
+import { useRouter } from "next/router";
 import { admins } from "../../data/users";
+import { AddAdminDialog } from "../ShareDialog/AddAdminDialog";
 
 interface Props extends ComponentProps<"header"> {
   isOpen: boolean;
@@ -36,9 +36,11 @@ export function DashboardHeader({
 
   const createAddAdminButton = isAdmin ? (
     <div className="pb-2">
-      <Button className={styles.profilePopoverButton} icon={<PlusIcon />}>
-        Add Admin
-      </Button>
+      <AddAdminDialog>
+        <Button icon={<PlusIcon />} className={styles.profilePopoverButton}>
+          Add Admin{" "}
+        </Button>
+      </AddAdminDialog>
     </div>
   ) : null;
 
