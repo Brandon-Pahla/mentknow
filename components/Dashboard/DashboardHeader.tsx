@@ -25,12 +25,22 @@ export function DashboardHeader({
 }: Props) {
   const { data: session } = useSession();
 
-  const router = useRouter()
+  const router = useRouter();
+
   let isAdmin = false;
+
   if (session) {
-    const userInf = session.user.info;
-    isAdmin = admins.includes(userInf.id);
+    const userInfo = session.user.info;
+    isAdmin = admins.includes(userInfo.id);
   }
+
+  const createAddAdminButton = isAdmin ? (
+    <div className="pb-2">
+      <Button className={styles.profilePopoverButton} icon={<PlusIcon />}>
+        Add Admin
+      </Button>
+    </div>
+  ) : null;
 
   return (
     <header className={clsx(className, styles.header)} {...props}>
@@ -60,23 +70,11 @@ export function DashboardHeader({
                   </span>
                 </div>
                 <div className={styles.profilePopoverActions}>
-                  {isAdmin && (
-                    <div className="pb-2">
-                      <Button
-                        className={styles.profilePopoverButton}
-                        icon={<PlusIcon />}
-                      >
-                        Add Admin
-                      </Button>
-                    </div>
-                  )}
+                  {createAddAdminButton}
                   <Button
                     className={styles.profilePopoverButton}
                     icon={<SignOutIcon />}
-                    onClick={() =>
-                      router.push('/api/auth/signout')
-
-                    }
+                    onClick={() => router.push("/api/auth/signout")}
                   >
                     Sign out
                   </Button>
