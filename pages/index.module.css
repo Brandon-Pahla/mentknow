@@ -43,7 +43,9 @@
 .featuresGrid {
   display: grid;
   gap: var(--space-10);
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  /* flex-wrap: wrap; */
+  /* justify-content: space-between; */
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1.5fr));
 }
 
 .featuresFeature {

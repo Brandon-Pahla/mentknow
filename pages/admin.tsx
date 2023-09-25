@@ -13,6 +13,7 @@ import { useStorage } from "../liveblocks.config";
 import { shallow } from "@liveblocks/client";
 import BarChart from "../components/Admin/UsersPerBoard";
 import BoardUserChart from "../components/Admin/UsersPerBoard";
+import BoardCreationChart from "../components/Admin/BoardCreationChart";
 
 
 interface BoardData {
@@ -77,7 +78,7 @@ export default function Admin() {
 
     fetchBoards();
   }, []);
-  
+
   // fetch all notes
 
   // fetch all users
@@ -123,13 +124,23 @@ export default function Admin() {
           <Feature
             description={
               <>
-                <BoardUserChart boardData={boardData || []}/>
+                <BoardUserChart boardData={boardData || []} />
                 <p>A visual representation of the number of users for each board, making it easy to compare the user counts across different boards</p>
               </>
             }
             title="Users per Board"
           />
-          
+
+          <Feature
+            description={
+              <>
+                <BoardCreationChart boardData={boardData || []} />
+                <p>This time series chart visualizes the distribution of board creations over time. It provides insights into when and how many boards were created on specific dates.</p>
+              </>
+            }
+            title="Board creations over time"
+          />
+
         </div>
       </Container>
     </AdminLayout>

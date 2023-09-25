@@ -51,7 +51,7 @@ const BoardUserChart: React.FC<BoardUserChartProps> = ({ boardData }) => {
         style={{
           axis: { stroke: 'none' },
           ticks: { size: 0 },
-          tickLabels: { fontSize: 12, angle: -45, padding: 10 },
+          tickLabels: { fontSize: 12, angle: 0, padding: 10 },
         }}
       />
       <VictoryAxis
