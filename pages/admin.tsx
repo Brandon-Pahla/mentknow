@@ -102,8 +102,8 @@ export default function Admin() {
 
       </Container>
       <Container className={styles.section}>
-        <h2 className={styles.sectionTitle}>Summary</h2>
-        <div className={styles.featuresGrid}>
+        {/* <h2 className={styles.sectionTitle}>Summary</h2> */}
+        <div className="mb-5">
           <Feature
             description={
               <>
@@ -112,7 +112,10 @@ export default function Admin() {
             }
             title="Total Boards Created"
           />
-          <Feature
+          
+        </div>
+        <div className={styles.featuresGrid}>
+          {/* <Feature
             description={
               <>
                 Best practices followed, using a mixture of SSR and custom API
@@ -120,7 +123,7 @@ export default function Admin() {
               </>
             }
             title="Total Number of Groups"
-          />
+          /> */}
           <Feature
             description={
               <>

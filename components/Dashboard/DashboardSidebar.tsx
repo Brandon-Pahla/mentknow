@@ -12,6 +12,7 @@ import { LinkButton } from "../../primitives/Button";
 import { Group } from "../../types";
 import { normalizeTrailingSlash } from "../../utils";
 import styles from "./DashboardSidebar.module.css";
+import { isAdmin, updateAdminsDb, updateAdminsList } from "../../pages/api/database/admins";
 
 interface Props extends ComponentProps<"div"> {
   groups: Group[];
