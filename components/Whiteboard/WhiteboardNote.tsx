@@ -241,7 +241,7 @@ export const WhiteboardNote = memo(
         className={clsx(className, "notelement", styles.container)}
         data-note={id}
         onDoubleClick={handleDoubleClick}
-        // onClick={() => onTagChange}
+        onClick={() => onTagChange}
         onContextMenu={onDelete}
         onPointerDown={onPointerDown}
         style={{
@@ -286,10 +286,10 @@ export const WhiteboardNote = memo(
                 onFocus={onFocus}
                 onKeyDown={handleEnterKeyPress}
                 onPointerDown={(e) => e.stopPropagation()}
-                placeholder="#"
+                placeholder=""
                 ref={tagAreaRef}
                 rows={1}
-                value={noteTag}
+                value={noteTag.charAt(0)}
                 // readOnly
               />
             </div>

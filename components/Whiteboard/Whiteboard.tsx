@@ -81,7 +81,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     (root) => Array.from(root.categories?.values() ?? []),
     shallow
   );
-  // console.log("Notes:", noteObjects)
+  console.log("Notes:", noteObjects)
   // console.log("Categories:", categoryObjects)
 
   const handleGeneratePdf = async () => {
@@ -211,7 +211,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     if (self.isReadOnly) {
       return;
     }
-
+    console.log("Clicked tag:", updates)
     const note = storage.get("notes").get(noteId);
     if (note) {
       note.update(updates);
@@ -303,6 +303,7 @@ function Canvas({ currentUser, className, style, ...props }: Props) {
     noteId: string
   ) {
     handleNoteUpdate(noteId, { tag: e.target.value, selectedBy: currentUser });
+    
   }
 
   // When note title is changed, update the text and selected user on the LiveObject
@@ -579,11 +580,12 @@ export async function generatePDF(noteArray: any[], categoryArray: any[]) {
     textContent += `#${category.tag} ${category.title}:\n`;
 
     // Filter notes that have the same tag as the category
-    const matchingNotes = noteArray.filter((note) => note.tag === category.tag);
+    const matchingNotes = noteArray.filter((note) => note.tag === category.tag+category.tag);
+    
 
     // Append matching notes to the text content
     for (const note of matchingNotes) {
-      textContent += `- Tag: ${note.tag}\n  Title: ${note.title}\n  Text: ${note.text}\n\n`;
+      textContent += `- Tag: ${String(note.tag).charAt(0)}\n  Title: ${note.title}\n  Text: ${note.text}\n\n`;
     }
   }
 
